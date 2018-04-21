@@ -127,7 +127,7 @@ var biliZhuanLanMarkdown = {
             if(img_src.indexOf('http') != 0) {
                 var img_prefix = "";
                 var img_data = fs.readFileSync(img_src);
-                var img_Base64 = imgData.toString('base64');
+                var img_Base64 = img_data.toString('base64');
                 if(path.extname(img_src) == '.png') {
                     img_prefix = "data:image/png;base64,";
                 }
