@@ -157,5 +157,5 @@ biliZhuanlanMarkdown.startProcess (
 
 # License（许可）
 
-MIT
+[MIT](./LICENSE)
 
