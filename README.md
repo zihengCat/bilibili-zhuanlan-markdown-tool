@@ -2,25 +2,34 @@
 
 ![bilixmd](./docs/bilixmd.png)
 
-A useful tool for writing Markdown format on bilibili zhuanlan.
-
-一款可以让你使用`Markdown`格式撰写哔哩哔哩（bilibili.com）专栏文章的辅助工具。
-
+> A useful tool for writing Markdown format on bilibili zhuanlan.
+> 一款可以让你使用`Markdown`格式撰写哔哩哔哩（bilibili.com）专栏文章的辅助工具。
 
 # Usage（使用说明）
 
 1. Install `Node.js` environment first.
+
 2. Install project dependencies using `npm install`.
+
 3. Go to *bilibili.com*, set a zhuanlan article draft.
+
 4. Get and save article's `aid` and page's `cookies` into a `.json` config file by yourself.
+
 5. Writting with `Markdown` freely!
+
 6. Run `node src/cli.js [md_path] [config_path]` for your own purpose.
 
+
 1. 请先在本机装好`Node.js`环境。
+
 2. 使用`npm install`安装项目依赖。
+
 3. 前往哔哩哔哩（bilibili.com）专栏投稿区，建立一篇专栏草稿。
+
 4. 取得文章`aid`与页面`cookies`，写入配置文件。
+
 5. 使用`Markdown`写作吧！
+
 6. 运行`node src/cli.js [md_path][config_path]`来提交你的`Markdown`文章。
 
 # Configure（配置选项）
@@ -37,6 +46,7 @@ The `.json` config file of the tool is really simple, just looks like that:
 ```
 
 For more details:
+
 更详细的说明：
 
 ```
@@ -53,7 +63,7 @@ For more details:
 
 A short example to show how to develop with the tool.
 
-一个利用该工具的代码小实例：
+一个利用该工具的代码小例子：
 
 ```
 /*
