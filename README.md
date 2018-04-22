@@ -14,7 +14,7 @@
 
 3. 使用`Markdown`写作。
 
-4. `node new.js && node upload [md_file]`创建并提交`Markdown`文章。
+4. `node new.js && node upload.js [md_file]`创建并提交`Markdown`文章。
 
 # Example（实例讲解）
 
