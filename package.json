@@ -1,10 +1,10 @@
 {
   "name": "bilibili-zhuanlan-markdown-tool",
   "version": "1.0.0",
-  "description": "A useful tool for writing Markdown format on bilibili zhuanlan.",
-  "main": "main.js",
+  "description": "A useful tool for writing Markdown on bilibili zhuanlan.",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node src/test_script.js"
   },
   "author": "zihengCat",
   "license": "MIT",
