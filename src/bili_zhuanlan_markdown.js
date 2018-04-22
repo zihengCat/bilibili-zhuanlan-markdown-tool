@@ -11,6 +11,13 @@ const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
 const marked = require('marked');
+/*
+ * API 说明
+ * 参数: Markdown路径(path), 配置选项(object)
+ * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
+ *           上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
+ *           合成表单发送更新
+ */
 var biliZhuanLanMarkdown = {
     /* 专栏表单数据结构 */
     formdata_template: {

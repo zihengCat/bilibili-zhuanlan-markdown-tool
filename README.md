@@ -8,79 +8,53 @@
 
 # Usage（使用说明）
 
-1. 本机安装`Node.js`环境。
+1. 本机安装`Node.js`环境，获取项目源码，使用`npm install`安装项目依赖。
 
-2. 获取项目源码，使用`npm install`安装项目依赖。
+2. 取得`cookies`，写入配置文件。
 
-3. 前往*哔哩哔哩（bilibili.com）专栏投稿区*，建立一篇专栏文章草稿。
+3. 使用`Markdown`格式写作。
 
-4. 取得文章`aid`与`cookies`，写入配置文件。
-
-5. 使用`Markdown`格式写作。
-
-6. 运行`node src/cli.js [md_path] [config_path]`提交`Markdown`文章。
+4. 运行`node new.js && node upload [md_file]`创建并提交`Markdown`文章。
 
 # Example（实例讲解）
 
 通过一个实例，来具体讲解应如何使用此工具。
 
-## 步骤1, 2 - 安装环境与获取源码
+## 步骤1 - 安装环境与获取源码
 
 此工具使用`Node.js`写成，要想使用它，你需要先在本机上安装好`Node.js`环境。
 获取GitHub上的项目源码，可以使用`git`，也可以直接下载`zip`压缩包。对于`Node.js`项目，我们一般使用`npm install`来安装项目依赖。
 
-## 步骤3 - 建立专栏文章草稿
+## 步骤2 - 获取关键参数写配置文件
 
-完成了上述两步后，你的计算机上应该有了能正常运行的`Node.js`，以及此工具的源码包。以上两步都是常规动作。
+这是至关重要的一步。我们需要**手动**取得关键参数：`cookies`，再写出配置文件。
+`cookies`是用户个人身份认证信息。工具依赖该参数与B站专栏服务器正常通信。
+使用**浏览器开发者工具**可以获得该参数。
 
-接下来，前往*哔哩哔哩（bilibili.com）专栏投稿区*，建立一篇专栏文章草稿。
-
-键入任意文章标题，这里文章的标题并不重要，可以随意写（但不写不行，标题不写无法存草稿），我们的目的只是**让一篇专栏文章成功保存草稿（即: 在B站服务器留下记录）**。如果不确定是否成功保存，可以点击专栏编辑区下方的*存草稿*按钮。
-
-![step3_1][step3_1]
-
-> 图: 建立专栏文章草稿
-
-![step3_2][step3_2]
-
-> 图: 保存专栏文章草稿
-
-## 步骤4 - 获取目标参数写配置文件
-
-**步骤4**是至关重要的一步。我们需要**手动**取得两枚关键参数，`aid`与`cookies`，再写出配置文件。其中，`aid`是专栏文章的标识号，`cookies`是用户个人身份认证信息。只有正确取得这两枚关键参数，工具才可与B站专栏服务器正常交互。
-获取这两枚参数的方式都非常简单，`aid`在地址栏的URL参数上就有写明，`cookies`则可以使用**浏览器开发者工具**获得。
-
-![step4_1][step4_1]
-
-> 图: 获取`aid`参数
-
-![step4_2][step4_2]
+![step2][step2]
 
 > 图: 获取`cookies`参数
 
-我们将取得的两枚关键参数组合写成一个`.json`配置文件，配置文件的名字可以随意取。为了方便起见，这里就将配置文件命名为`config.json`。
+我们将取得的关键参数写入到`./config/config.json`配置文件。
 
-![step4_3][step4_3]
+## 步骤3 - Markdown 写作
 
-> 图: 组合参数写配置文件
+至此，准备工作已完成。我们可以告别B站专栏富文本编辑器，转而使用`Markdown`撰写文章了。**拿起你最钟爱的一支`Markdown`编辑器，愉快地写文章吧！**
 
-## 步骤5 - Markdown 写作
-
-至此，所有准备工作均已完成。我们可以告别B站专栏富文本编辑器，转而使用`Markdown`撰写文章了。**拿起你最钟爱的一支`Markdown`编辑器，愉快地写文章吧！**
-
-![step5][step5]
+![step3][step3]
 
 > 图: `Markdown`文章
 
-## 步骤6 - 命令提交
+## 步骤4 - 命令提交
 
 最后，我们来将这篇`Markdown`格式的文章**变身**成为B站专栏文章。此工具正是帮助你完成这项任务的。我们通过运行命令来提交`Markdown`文章，请将你的文章与配置文件一并输入，注意先后顺序。如果命令没有报错，那说明提交成功。
 ```
-$ node src/cli.js './test/Markdown来到了B站专栏.md' './test/config.json'
+$ node src/new.js
+$ node src/upload.js './test/Markdown来到了B站专栏.md'
 ```
 我们回到专栏草稿箱看一看，我们会发现，这篇`Markdown`格式的文章已经变身成为B站专栏文章了，排版、样式丝毫不差，静静地躺在专栏草稿箱之中，专栏文章的标题正是`Markdown`文件名。
 
-![step6][step6]
+![step4][step4]
 
 > 图: 由`Markdown`变身的专栏文章（网页端预览）
 
@@ -128,7 +102,6 @@ $ node src/cli.js './test/Markdown来到了B站专栏.md' './test/config.json'
 
 ```
 {
-  "aid":     "",
   "cookies": ""
 }
 ```
@@ -136,31 +109,31 @@ $ node src/cli.js './test/Markdown来到了B站专栏.md' './test/config.json'
 更加详细的说明：
 
 ```
-- aid     ->  文章标识号
-- cookies ->  以下四枚 Cookie 必需, 有效期大概1个月（过期重取）
-             "DedeUserID"
-             "DedeUserID__ckMd5"
-             "SESSDATA"
-             "bili_jct"
+cookies ->  以下四枚 Cookie 必需, 有效期大概1个月（过期重取）
+            "DedeUserID"
+            "DedeUserID__ckMd5"
+            "SESSDATA"
+            "bili_jct"
 ```
 
 # Develop（开发相关）
 
-利用该工具的代码小例子：
+利用该工具的代码实例:
 
 ```
 /*
  * API 说明
- * 参数: (Markdown 文档路径, 配置选项)
+ * 参数: Markdown 文档路径, 配置选项
  * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
  *           上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
  *           合成表单发送更新
  */
 biliZhuanlanMarkdown.startProcess (
-    './test.md',
+    "path",
     {
       "aid":     "",
-      "cookies": ""
+      "cookies": "",
+      "csrf":    ""
     }
 );
 ```
@@ -170,11 +143,7 @@ biliZhuanlanMarkdown.startProcess (
 [MIT](./LICENSE)
 
 [bilixmd]: ./docs/bilixmd.png
-[step3_1]: ./docs/step3_1.png
-[step3_2]: ./docs/step3_2.png
-[step4_1]: ./docs/step4_1.png
-[step4_2]: ./docs/step4_2.png
-[step4_3]: ./docs/step4_3.png
-[step5]:   ./docs/step5.png
-[step6]:   ./docs/step6.png
+[step2]:   ./docs/step2.png
+[step3]:   ./docs/step3.png
+[step4]:   ./docs/step4.png
 
