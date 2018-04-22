@@ -256,8 +256,8 @@ var biliZhuanLanMarkdown = {
             post_option.host = 'member.bilibili.com'
             post_option.path = '/x/web/article/upcover';
             post_option.headers['X-Requested-With'] = 'XMLHttpRequest';
-/*------------------*/
-/* Promise 同步执行 */
+/*---------------*/
+/* Promise 执行 */
 new Promise(function(resolve, reject) {
     var body = [ ];
     var img_id = form_data["cover"].slice(-50, -30);
@@ -288,7 +288,7 @@ new Promise(function(resolve, reject) {
     biliZhuanLanMarkdown.repalceLocalImgURLs(result);
     biliZhuanLanMarkdown.postHtmlForm();
 });
-/*------------------*/
+/*---------------*/
         }
         else if (flag_str == "html") {
             /* HTML 提交头 */
