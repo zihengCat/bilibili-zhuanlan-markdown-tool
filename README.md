@@ -10,7 +10,7 @@
 
 2. 获取项目源码，使用`npm install`安装项目依赖。
 
-3. 前往哔哩哔哩（bilibili.com）专栏投稿区，建立一篇专栏文章草稿。
+3. 前往*哔哩哔哩（bilibili.com）专栏投稿区*，建立一篇专栏文章草稿。
 
 4. 取得文章`aid`与`cookies`，写入配置文件。
 
@@ -20,7 +20,7 @@
 
 # Example（实例讲解）
 
-通过一个实例，来教大家应该如何使用此工具。
+通过一个实例，来具体讲解应如何使用此工具。
 
 ## 步骤1, 2 - 安装环境与获取源码
 
@@ -30,7 +30,9 @@
 ## 步骤3 - 建立专栏文章草稿
 
 完成了上述两步后，你的计算机上应该有了能正常运行的`Node.js`，以及此工具的源码包。以上两步都是常规动作。
-接下来，前往哔哩哔哩（bilibili.com）专栏投稿区，建立一篇专栏文章草稿。
+
+接下来，前往*哔哩哔哩（bilibili.com）专栏投稿区*，建立一篇专栏文章草稿。
+
 键入任意文章标题，这里文章的标题并不重要，可以随意写（但不写不行，标题不写无法存草稿），我们的目的只是**让一篇专栏文章成功保存草稿（即: 在B站服务器留下记录）**。如果不确定是否成功保存，可以点击专栏编辑区下方的*存草稿*按钮。
 
 ![step3_1][step3_1]
@@ -54,14 +56,11 @@
 
 > 图: 获取`cookies`参数
 
-我们将取得的两枚关键参数组合写成一个`.json`配置文件，配置文件的名字可以随意取。为了方便起见，我这里就将配置文件命名为`config.json`。
+我们将取得的两枚关键参数组合写成一个`.json`配置文件，配置文件的名字可以随意取。为了方便起见，这里就将配置文件命名为`config.json`。
 
-```
-{
-  "aid":     "4619",
-  "cookies": "im_local_unread_1584633=0; _cnt_dyn=undefined; _cnt_pm=0; _cnt_notify=0; uTZ=-480; user_face=https%3A%2F%2Fi1.hdslb.com%2Fbfs%2Fface%2F6924d7e00ab833cc20bc97c7d4147308b84464ae.jpg; finger=0e029071; buvid3=9800BBA9-3DE9-4C50-99B1-29ABE518D62E59218infoc; im_seqno_1584633=22; CURRENT_QUALITY=15"
-}
-```
+![step4_3][step4_3]
+
+> 图: 组合参数写配置文件
 
 ## 步骤5 - Markdown 写作
 
@@ -173,6 +172,7 @@ biliZhuanlanMarkdown.startProcess (
 [step3_2]: ./docs/step3_2.png
 [step4_1]: ./docs/step4_1.png
 [step4_2]: ./docs/step4_2.png
+[step4_3]: ./docs/step4_3.png
 [step5]:   ./docs/step5.png
 [step6]:   ./docs/step6.png
 
