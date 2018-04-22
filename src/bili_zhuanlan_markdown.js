@@ -1,10 +1,7 @@
 /*
  * bilibili Zhuanlan Markdown Supporter
- *
  * Author: zihengCat
- *
  * Lincese: MIT
- *
  */
 const fs = require('fs');
 const path = require('path');
@@ -68,7 +65,7 @@ var biliZhuanLanMarkdown = {
         /* 禁用内联 HTML 功能 */
         marked.setOptions({
             renderer: myRenderer,
-            sanitize: true,
+            sanitize: false,
             headerIds: false
         });
         this.html_text = marked(markdown_str);
