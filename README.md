@@ -1,5 +1,7 @@
 # bilibili-zhuanlan-markdown-tool
 
+[![Build Status](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool.svg?branch=master)](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool)
+
 ![bilixmd][bilixmd]
 
 这是一款可以让你使用`Markdown`撰写哔哩哔哩（bilibili.com）专栏文章的外部辅助工具。
