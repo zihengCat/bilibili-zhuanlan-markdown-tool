@@ -14,17 +14,17 @@ function md2html_test() {
     ||  biliZhuanlanMarkdown.md2Html('##### heading5') != "<h5>heading5</h5>"
     )
     {
-        throw new Error("Test failed: in Markdown `heading`");
+        throw new Error("Test failed: Markdown `heading`");
     }
     if (biliZhuanlanMarkdown.md2Html('paragraph') != "<p>paragraph</p>\n")
     {
-        throw new Error("Test failed: in Markdown `paragraph`");
+        throw new Error("Test failed: Markdown `paragraph`");
     }
     if (biliZhuanlanMarkdown.md2Html('**text**') !=
                                      '<p><strong>text</strong></p>\n'
     )
     {
-        throw new Error("Test failed: in Markdown `strong`");
+        throw new Error("Test failed: Markdown `strong`");
     }
 
 }
@@ -33,10 +33,10 @@ function words_count_test() {
     if(biliZhuanlanMarkdown.wordsCount('<p>12345</p>') != 5
     || biliZhuanlanMarkdown.wordsCount('<p>你好</p>')  != 2)
     {
-        throw new Error("Test failed: in words count");
+        throw new Error("Test failed: `wordsCount`");
     }
 }
-/* 测试集 */
+/* 测试集合 */
 function main_test() {
     md2html_test();
     words_count_test();

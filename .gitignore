@@ -1,6 +1,7 @@
 # config
 config/config_full.json
 config/config.json
+config/articles.json
 
 # tests
 tests

@@ -27,11 +27,21 @@ new Promise(function(resolve, reject) {
         }
         return csrf;
     }
-    var pform = fs.readFileSync('../config/config.json', 'utf-8');
+    /* 分离命令行参数 */
+    var args = process.argv.splice(2);
+    var title = "";
+    if(args.length == 1) {
+        title = args[0];
+    } else {
+        title = "New_Post";
+    }
+    var abs_cfg_path = path.resolve(__dirname, '../config/config.json');
+    //console.log(abs_cfg_path);
+    var pform = fs.readFileSync(abs_cfg_path, 'utf-8');
     pform = JSON.parse(pform);
     pform["csrf"] = get_csrf(pform['cookies']);
     var form_data = {
-            "title": "New_Post",
+            "title": title,
             "banner_url": "",
             "content": "",     /* 自动生成 */
             "summary": "",     /* 自动生成 */
@@ -94,6 +104,7 @@ new Promise(function(resolve, reject) {
     req.write(querystring.stringify(form_data));
     req.end();
 }).then(function (result){
-    fs.writeFileSync('../config/config_full.json', JSON.stringify(result));
-    console.log(result);
+    var abs_cfg_full_path = path.resolve(__dirname, '../config/config_full.json');
+    fs.writeFileSync(abs_cfg_full_path, JSON.stringify(result));
+    console.log("Success [aid=" + result["aid"] + ']');
 });
