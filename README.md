@@ -4,7 +4,7 @@
 
 ![bilixmd][bilixmd]
 
-这是一款可以让你使用`Markdown`撰写*哔哩哔哩（bilibili.com）*专栏文章的外部辅助工具。
+这是一款可以让你使用`Markdown`撰写**哔哩哔哩（bilibili.com）专栏文章**的外部辅助工具。
 
 # Usage（使用说明）
 
