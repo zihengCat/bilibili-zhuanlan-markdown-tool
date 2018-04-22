@@ -1,7 +1,8 @@
 /*
- * bilibili Zhuanlan Markdown Supporter
+ * bilibili Zhuanlan Markdown Tool - Core
  * Author: zihengCat
  * Lincese: MIT
+ * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
 const fs = require('fs');
 const path = require('path');
@@ -62,10 +63,10 @@ var biliZhuanLanMarkdown = {
             return '<span style="text-decoration: line-through;">' + text +
                    '</span>';
         }
-        /* 禁用内联 HTML 功能 */
+        /* 生成器配置选项 */
         marked.setOptions({
             renderer: myRenderer,
-            sanitize: false,
+            sanitize: true,    /* 内联 HTMl 功能: 禁用 */
             headerIds: false
         });
         this.html_text = marked(markdown_str);
