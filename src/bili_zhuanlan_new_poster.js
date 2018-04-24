@@ -10,6 +10,8 @@ const url = require('url');
 const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
+
+var newPoster = function() {
 /*------------------*/
 /* Promise 执行 */
 new Promise(function(resolve, reject) {
@@ -27,19 +29,9 @@ new Promise(function(resolve, reject) {
         }
         return csrf;
     }
-    /* 分离命令行参数 */
-    var args = process.argv.splice(2);
-    var title = "";
-    if(args.length == 1) {
-        title = args[0];
-    } else {
-        title = "New_Post";
-    }
     var abs_cfg_path = path.resolve(__dirname, '../config/config.json');
-    //console.log(abs_cfg_path);
     var pform = fs.readFileSync(abs_cfg_path, 'utf-8');
     pform = JSON.parse(pform);
-    pform["csrf"] = get_csrf(pform['cookies']);
     var form_data = {
             "title": title,
             "banner_url": "",
@@ -55,7 +47,7 @@ new Promise(function(resolve, reject) {
             "origin_image_urls": "",
             "dynamic_intro": "",
             // "aid": "",         /* 不需要 */
-            "csrf": pform['csrf']
+            "csrf": get_csrf(pform['cookies']
     };
     /* 公共头部 */
     var post_option = {
@@ -104,7 +96,8 @@ new Promise(function(resolve, reject) {
     req.write(querystring.stringify(form_data));
     req.end();
 }).then(function (result){
-    var abs_cfg_full_path = path.resolve(__dirname, '../config/config_full.json');
-    fs.writeFileSync(abs_cfg_full_path, JSON.stringify(result));
     console.log("Success [aid=" + result["aid"] + ']');
+    return result["aid"];
 });
+}
+module.exports = newPoster;

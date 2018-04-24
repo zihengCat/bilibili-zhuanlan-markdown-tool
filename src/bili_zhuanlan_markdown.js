@@ -21,7 +21,7 @@ const marked = require('marked');
 var biliZhuanLanMarkdown = {
     /* 专栏表单数据结构 */
     formdata_template: {
-        "title": "",       /* 自动获取 */
+        "title": "",       /* 自动生成 */
         "banner_url": "",
         "content": "",     /* 自动生成 */
         "summary": "",     /* 自动生成 */
@@ -29,13 +29,13 @@ var biliZhuanLanMarkdown = {
         "category": 0,
         "list_id": 0,
         "tid": 0,          /* 不明 */
-        "reprint": 0,      /* 必需 */
+        "reprint": 1,      /* 必需[0, 1] */
         "tags": "",
         "image_urls": "",
         "origin_image_urls": "",
         "dynamic_intro": "",
-        "aid": 0,          /* 必需 */
-        "csrf": ""		   /* 自动获取 */
+        // "aid": "",      /* 可有可无 */
+        "csrf": ""		   /* 自动生成 */
     },
     /* Markdown 文本 */
     markdown_text: "",
@@ -49,6 +49,22 @@ var biliZhuanLanMarkdown = {
     image_local_urls: [ ],
     /* 上传图片地址暂存区 */
     image_bili_urls: [ ],
+    /* 从 Cookie 获取 csrf 信息*/
+    get_csrf: function (cookies_str) {
+        cookies_str = cookies_str.split(';');
+        for(var i = 0; i < cookies_str.length; i++) {
+            cookies_str[i] = cookies_str[i].trim();
+        }
+        var csrf = "";
+        for(var i = 0; i < cookies_str.length; i++) {
+            /* 关键字段: `bili_jct` */
+            if(cookies_str[i].indexOf("bili_jct=") == 0) {
+                csrf = cookies_str[i].slice(
+                       cookies_str[i].indexOf("=") + 1);
+            }
+        }
+        return csrf;
+    },
     /* 核心函数: Markdown 转 HTML */
     md2Html: function (markdown_str) {
         /* 自定义生成器 */
@@ -113,7 +129,7 @@ var biliZhuanLanMarkdown = {
         title_str = title_str.slice(0, title_str.lastIndexOf('.'));
         form_data["title"] = title_str;
         // form_data["tid"]   = pform["tid"];
-        form_data["aid"]   = pform["aid"];
+        // form_data["aid"]   = pform["aid"];
         form_data["csrf"]  = pform["csrf"];
         /* 覆写目标数据 */
         form_data["content"] = this.html_text;
@@ -156,13 +172,17 @@ var biliZhuanLanMarkdown = {
     },
     /* 入口函数 */
     startProcess: function (md_path, p_form) {
-        /* 读取 MD 文档与配置信息 */
+        /* 读取 MD 文档绝对路径*/
         this.markdown_path = path.resolve(md_path);
+        /* 读取 MD 文档内容 */
         this.markdown_text = fs.readFileSync(md_path, 'utf-8');
+        /* 读取配置信息 */
         this.preference_form = p_form;
-        /* 转换Markdown文档至HTML */
+        /* 计算 csrf 值 */
+        this.preference_form['csrf'] = this.get_csrf(p_form['cookies']);
+        /* 转换 Markdown 文档为 HTML 代码 */
         this.md2Html(this.markdown_text);
-        /* 处理图片 */
+        /* 处理本地图片 */
         this.processAll();
         /* 发送表单 */
         this.postHtmlForm();
@@ -170,7 +190,7 @@ var biliZhuanLanMarkdown = {
     processAll: function () {
         this.processLocalImages();
     },
-    /* 处理HTML中的本地图片 */
+    /* 处理 HTML 中本地图片 */
     processLocalImages: function () {
         function checkLocally(src) {
             if(src.indexOf("http") == 0) {

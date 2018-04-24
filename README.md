@@ -14,7 +14,7 @@
 
 3. 使用`Markdown`写作。
 
-4. `node new.js && node upload.js [md_file]`创建并提交`Markdown`文章。
+4. 使用前端页面或命令行工具提交`Markdown`文章。
 
 # Example（实例讲解）
 
@@ -43,16 +43,28 @@
 
 > 图: `Markdown`文章
 
-## 步骤4 - 命令提交
+## 步骤4 - 提交文章
 
-文章写完了，我们来将这篇`Markdown`格式的文章**变身**成为B站专栏文章。此工具正是帮助你完成这项任务的。我们通过运行命令来提交`Markdown`文章。如果命令没有报错，那就说明提交成功。
+文章写完了，我们来将这篇`Markdown`格式的文章**变身**成为B站专栏文章。此工具正是帮助你完成这项任务的。
+
+此工具提供两种提交方式: **前端窗口**提交与**命令行工具**提交。我们使用前端窗口提交。
+我们运行命令来启动工具前端窗口，填入相关参数，点击提交，如果反馈成功，则提交成功。
+
 ```
-$ node src/new.js
-$ node src/upload.js './test/Markdown来到了B站专栏.md'
+$ npm run server
 ```
+
+![step4_1][step4_1]
+
+> 图: 工具前端页面
+
+![step4_2][step4_2]
+
+> 图: 提交成功反馈页面
+
 现在我们可以回到B站专栏草稿箱看一看，我们会发现，这篇`Markdown`格式的文章已经**变身**成为B站专栏文章了，排版、样式丝毫不差，静静地躺在专栏草稿箱中，专栏文章的标题是`Markdown`文件名。
 
-![step4][step4]
+![step4_3][step4_3]
 
 > 图: 由`Markdown`变身的专栏文章（网页端预览）
 
@@ -143,5 +155,7 @@ biliZhuanlanMarkdown.startProcess (
 [bilixmd]: ./docs/bilixmd.png
 [step2]:   ./docs/step2.png
 [step3]:   ./docs/step3.png
-[step4]:   ./docs/step4.png
+[step4_1]: ./docs/step4_1.png
+[step4_2]: ./docs/step4_2.png
+[step4_3]: ./docs/step4_3.png
 
