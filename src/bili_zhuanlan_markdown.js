@@ -65,6 +65,15 @@ var biliZhuanLanMarkdown = {
         }
         return csrf;
     },
+    has_loacl_images: function(html_code){
+        var all = html_code.match(/src=.* \/>/g);
+        /* 如果不存在图片, 直接返回 */
+        if(all == null) {
+            return false;
+        } else {
+            return true;
+        }
+    },
     /* 核心函数: Markdown 转 HTML */
     md2Html: function (markdown_str) {
         /* 自定义生成器 */
@@ -78,7 +87,8 @@ var biliZhuanLanMarkdown = {
         myRenderer.image = function (href, title, text) {
             return '<figure class="img-box">' +
                    '<img src="%src" />'.replace("%src", href) +
-                   '<figcaption class="caption">%t</figcaption>'.replace("%t", text) +
+                   '<figcaption class="caption">%t</figcaption>'.replace(
+                   "%t", text) +
                    '</figure>';
         }
         /* 覆写`删除线`生成规则 */
@@ -182,13 +192,11 @@ var biliZhuanLanMarkdown = {
         this.preference_form['csrf'] = this.get_csrf(p_form['cookies']);
         /* 转换 Markdown 文档为 HTML 代码 */
         this.md2Html(this.markdown_text);
-        /* 处理本地图片 */
-        this.processAll();
-        /* 发送表单 */
-        this.postHtmlForm();
-    },
-    processAll: function () {
-        this.processLocalImages();
+        if(this.has_loacl_images(this.html_text) == true) {
+            biliZhuanLanMarkdown.processLocalImages();
+        } else {
+            biliZhuanLanMarkdown.postHtmlForm();
+        }
     },
     /* 处理 HTML 中本地图片 */
     processLocalImages: function () {
@@ -227,22 +235,48 @@ var biliZhuanLanMarkdown = {
         }
     },
     /* 将HTML中的本地图片地址替换为B站图片地址 */
-    repalceLocalImgURLs: function (fmt_str) {
-        /* 根据格式字符串取得目标信息 */
-        var arr = fmt_str.split(",");
-        var img_id = arr[0];
-        var img_bili_url = arr[1];
-        var img_local_url = "";
-        /* 根据图片ID匹配本地图片地址 */
-        for(var i = 0; i < this.image_local_urls.length; i++) {
-            if(this.image_local_urls[i][0] == img_id) {
-                img_local_url = this.image_local_urls[i][1];
+    repalceLocalImgURLs: function () {
+        function repalce_one_img(fmt_str) {
+            /* 根据格式字符串取得目标信息 */
+            var arr = fmt_str.split(",");
+            var img_id = arr[0];
+            var img_bili_url = arr[1];
+            var img_local_url = "";
+            /* 根据图片ID匹配本地图片地址 */
+            for(var i = 0;
+                i < biliZhuanLanMarkdown.image_local_urls.length; i++) {
+                if(biliZhuanLanMarkdown.image_local_urls[i][0] == img_id) {
+                    img_local_url =
+                    biliZhuanLanMarkdown.image_local_urls[i][1];
+                /* 替换本地图片地址
+                   格式: src="./bilibili.png" */
+                biliZhuanLanMarkdown.html_text =
+                    biliZhuanLanMarkdown.html_text.replace(
+                    new RegExp(img_local_url, "g"), img_bili_url);
+                    console.log("Image `" + img_local_url + "` " +
+                                "uploads successful!"
+                    );
+               }
             }
         }
-        /* 替换本地图片地址
-           格式: src="./bilibili.png" */
-        this.html_text =
-        this.html_text.replace(new RegExp(img_local_url, "g"), img_bili_url);
+        /* 本地图片已全部上传完成 */
+        if((biliZhuanLanMarkdown.image_local_urls.length != 0) &&
+           (biliZhuanLanMarkdown.image_bili_urls.length != 0) &&
+           (biliZhuanLanMarkdown.image_local_urls.length ==
+            biliZhuanLanMarkdown.image_bili_urls.length))
+        {
+            /* 替换图片链接地址 */
+            for(var i = 0; i < this.image_bili_urls.length; i++) {
+                repalce_one_img(this.image_bili_urls[i]);
+            }
+            /* 一次性全部提交 */
+            biliZhuanLanMarkdown.postHtmlForm();
+        }
+        else {
+            /* 本地图片未全部上传完成 */
+            //console.log("Do nothing");
+        }
+
     },
     /* 提交 HTML 表单 */
     postHtmlForm: function () {
@@ -303,10 +337,9 @@ new Promise(function(resolve, reject) {
     });
     req.write(querystring.stringify(form_data));
     req.end();
-}).then(function (result){
-    /* 可优化部分 */
-    biliZhuanLanMarkdown.repalceLocalImgURLs(result);
-    biliZhuanLanMarkdown.postHtmlForm();
+}).then(function(result){
+    biliZhuanLanMarkdown.image_bili_urls.push(result);
+    biliZhuanLanMarkdown.repalceLocalImgURLs();
 });
 /*---------------*/
         }
