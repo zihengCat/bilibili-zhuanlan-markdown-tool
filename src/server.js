@@ -28,15 +28,26 @@ http.createServer(function (request, response) {
             var abs_cfg_path = path.resolve(__dirname,
                                '../config/config.json');
             var cfg = fs.readFileSync(abs_cfg_path, 'utf-8');
-            /* 调用接口上传处理 */
-            biliZhuanlanMarkdown.startProcess(body.md_file_path,
-                                              JSON.parse(cfg));
-            /* 返回成功页面 */
-            var html_success_path = path.resolve(__dirname,
-                                    '../front_end/feedback_success.html');
-            var html_success_data = fs.readFileSync(html_success_path, 'utf-8');
-            response.write(html_success_data);
+            try {
+                /* 调用接口上传处理 */
+                var cookie = JSON.parse(cfg);
+                cookie = cookie['cookies'];
+                biliZhuanlanMarkdown.initStatus(cookie);
+                biliZhuanlanMarkdown.sendArticle(body.md_file_path);
+                /* 返回成功页面 */
+                var html_success_path = path.resolve(__dirname,
+                                        '../front_end/feedback_success.html');
+                var html_success_data = fs.readFileSync(html_success_path, 'utf-8');
+                response.write(html_success_data);
             }
+            catch(e) {
+                /* 返回失败页面 */
+                var html_success_path = path.resolve(__dirname,
+                                        '../front_end/feedback_fail.html');
+                var html_success_data = fs.readFileSync(html_success_path, 'utf-8');
+                response.write(html_success_data);
+            }
+        }
         else {
             /* 返回同页面 */
             response.write(html_data);

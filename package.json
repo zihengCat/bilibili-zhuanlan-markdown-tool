@@ -1,11 +1,11 @@
 {
   "name": "bilibili-zhuanlan-markdown-tool",
   "version": "1.0.2",
-  "description": "A useful tool for submit Markdown files to Bilibili zhuanlan.",
+  "description": "A useful tool for send Markdown file to Bilibili Zhuanlan.",
   "main": "index.js",
   "scripts": {
     "test":   "node src/test_script.js",
-    "server": "node src/upload_server.js"
+    "server": "node src/server.js"
   },
   "repository": {
       "type": "git",
