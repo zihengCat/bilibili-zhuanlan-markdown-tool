@@ -130,18 +130,18 @@ cookies ->  以下四枚 Cookie 必需, 有效期大概半个月（过期重取�
 
 # Develop（开发相关）
 
-集成该工具开发，需要先`npm install`安装后，导入模块。
+集成该工具开发，需要先`npm install`安装，再导入`bilibili-markdown-tool`模块。
 
 ```
 npm install bilibili-markdown-tool
 ```
 
 | API | 说明 |
-|:----|------|
+|:----|:-----|
 | `initStatus(cookies_str)` | 初始化函数，输入用户认证`Cookie`信息  |
 | `sendArticle(markdown_path)` | 发送一篇本地`Markdown`文章至B站专栏草稿箱|
 
-> 表: 工具API接口
+> 表: 模块`API`接口
 
 # License（许可协议）
 
