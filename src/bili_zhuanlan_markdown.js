@@ -37,6 +37,8 @@ var biliZhuanLanMarkdown = {
         // "aid": "",      /* 可有可无 */
         "csrf": ""		   /* 自动生成 */
     },
+    /* 用户认证 Cookies */
+    cookies_text: "",
     /* Markdown 文本 */
     markdown_text: "",
     /* 转换后 HTML 文本 */
@@ -49,6 +51,22 @@ var biliZhuanLanMarkdown = {
     image_local_urls: [ ],
     /* 上传图片地址暂存区 */
     image_bili_urls: [ ],
+
+    /* API函数: 初始化(获取用户认证cookies)
+                任何与B站服务器进行交互的操作都应先调用此函数初始化 */
+    initStatus: function (cookies_str) {
+        /* 检查 Cookies 是否包含关键字段 */
+        if(cookies_str.match(/sid=/g) == null ||
+           cookies_str.match(/DedeUserID=/g) == null ||
+           cookies_str.match(/DedeUserID__ckMd5=/g) == null ||
+           cookies_str.match(/bili_jct=/g) == null ||
+           cookies_str.match(/SESSDATA=/g) == null )
+        {
+            throw("Error: invaild cookies");
+        }
+        this.cookies_text = cookies_str;
+        return this.cookies_text;
+    },
     /* 功能函数: 从 Cookie 获取 csrf 信息*/
     get_csrf: function (cookies_str) {
         cookies_str = cookies_str.split(';');
