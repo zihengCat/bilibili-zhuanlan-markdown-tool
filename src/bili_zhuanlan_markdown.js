@@ -19,6 +19,48 @@ const marked = require('marked');
  *           合成表单发送更新
  */
 var biliZhuanLanMarkdown = {
+    /* API 函数: 初始化(获取用户认证cookies)
+                 任何与B站服务器交互的操作都应先调用此函数初始化 */
+    initStatus: function (cookies_str) {
+        /* 检查 Cookies 是否包含关键字段 */
+        if(cookies_str.match(/sid=/g) == null ||
+           cookies_str.match(/DedeUserID=/g) == null ||
+           cookies_str.match(/DedeUserID__ckMd5=/g) == null ||
+           cookies_str.match(/bili_jct=/g) == null ||
+           cookies_str.match(/SESSDATA=/g) == null )
+        {
+            throw("Error: invaild cookies");
+        }
+        this.cookies_text = cookies_str;
+        return this.cookies_text;
+    },
+    /* API 函数: 发送本地`Markdown`文档至B站专栏
+     *           成功无反馈，失败抛出错误
+     */
+    sendArticle: function (markdown_path) {
+        if(this.cookies_text != ""){
+            /* 读取 MD 文档绝对路径 */
+            this.markdown_path = path.resolve(markdown_path);
+            /* 读取 MD 文本内容(UTF-8) */
+            this.markdown_text = fs.readFileSync(markdown_path, 'utf-8');
+            /* 读取配置信息 */
+            this.preference_form = JSON.parse('{"cookies":"' +
+                                                 this.cookies_text +
+                                              '"}');
+            /* 计算 csrf 值 */
+            this.preference_form['csrf'] = this.get_csrf(this.cookies_text);
+            /* 转换 Markdown 文档为 HTML 代码 */
+            this.md2Html(this.markdown_text);
+            if(this.has_loacl_images(this.html_text) == true) {
+                biliZhuanLanMarkdown.processLocalImages();
+            } else {
+                biliZhuanLanMarkdown.postHtmlForm();
+            }
+        }
+        else {
+            throw("Error: uninitialized");
+        }
+    },
     /* 专栏表单数据结构 */
     formdata_template: {
         "title": "",       /* 自动生成 */
@@ -51,22 +93,6 @@ var biliZhuanLanMarkdown = {
     image_local_urls: [ ],
     /* 上传图片地址暂存区 */
     image_bili_urls: [ ],
-
-    /* API函数: 初始化(获取用户认证cookies)
-                任何与B站服务器进行交互的操作都应先调用此函数初始化 */
-    initStatus: function (cookies_str) {
-        /* 检查 Cookies 是否包含关键字段 */
-        if(cookies_str.match(/sid=/g) == null ||
-           cookies_str.match(/DedeUserID=/g) == null ||
-           cookies_str.match(/DedeUserID__ckMd5=/g) == null ||
-           cookies_str.match(/bili_jct=/g) == null ||
-           cookies_str.match(/SESSDATA=/g) == null )
-        {
-            throw("Error: invaild cookies");
-        }
-        this.cookies_text = cookies_str;
-        return this.cookies_text;
-    },
     /* 功能函数: 从 Cookie 获取 csrf 信息*/
     get_csrf: function (cookies_str) {
         cookies_str = cookies_str.split(';');

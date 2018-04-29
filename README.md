@@ -121,7 +121,7 @@ $ npm run server
 更加详细的说明：
 
 ```
-cookies ->  以下四枚 Cookie 必需, 有效期大概1个月（过期重取）
+cookies ->  以下四枚 Cookie 必需, 有效期大概半个月（过期重取）
             "DedeUserID"
             "DedeUserID__ckMd5"
             "SESSDATA"
@@ -130,23 +130,18 @@ cookies ->  以下四枚 Cookie 必需, 有效期大概1个月（过期重取）
 
 # Develop（开发相关）
 
-使用此工具进行开发的代码实例:
+集成该工具开发，需要先`npm install`安装后，导入模块。
 
 ```
-/*
- * API 说明
- * 参数: Markdown 文档路径, 配置选项
- * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
- *           上传文章本地图片至B站 -> 取得B站外链 ->
- *           替换本地图片地址为B站外链地址 -> 合成表单发送更新
- */
-biliZhuanlanMarkdown.startProcess (
-    "path/to/markdown.md",
-    {
-      "cookies": "data",
-    }
-);
+npm install bilibili-markdown-tool
 ```
+
+| API | 说明 |
+|:----|------|
+| `initStatus(cookies_str)` | 初始化函数，输入用户认证`Cookie`信息  |
+| `sendArticle(markdown_path)` | 发送一篇本地`Markdown`文章至B站专栏草稿箱|
+
+> 表: 工具API接口
 
 # License（许可协议）
 

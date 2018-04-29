@@ -18,5 +18,9 @@ if(args.length != 1) {
     var abs_cfg_full_path = path.resolve(__dirname, '../config/config.json');
     var cfg = fs.readFileSync(abs_cfg_full_path, 'utf-8');
     /* 调用接口上传处理 */
-    biliZhuanlanMarkdown.startProcess(args[0], JSON.parse(cfg));
+    //biliZhuanlanMarkdown.startProcess(args[0], JSON.parse(cfg));
+    var cookie = JSON.parse(cfg);
+    cookie = cookie['cookies'];
+    biliZhuanlanMarkdown.initStatus(cookie);
+    biliZhuanlanMarkdown.sendArticle(args[0]);
 }
