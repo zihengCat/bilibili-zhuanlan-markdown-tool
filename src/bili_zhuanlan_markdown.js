@@ -1,5 +1,5 @@
 /*
- * bilibili Zhuanlan Markdown Tool - Core
+ * Bilibili Zhuanlan Markdown Tool - Core
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
@@ -13,7 +13,7 @@ const querystring = require('querystring');
 const marked = require('marked');
 /*
  * API 说明
- * 参数: Markdown路径(path), 配置选项(object)
+ * 参数:     Markdown路径(path), 配置选项(object)
  * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
  *           上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
  *           合成表单发送更新
@@ -49,7 +49,7 @@ var biliZhuanLanMarkdown = {
     image_local_urls: [ ],
     /* 上传图片地址暂存区 */
     image_bili_urls: [ ],
-    /* 从 Cookie 获取 csrf 信息*/
+    /* 功能函数: 从 Cookie 获取 csrf 信息*/
     get_csrf: function (cookies_str) {
         cookies_str = cookies_str.split(';');
         for(var i = 0; i < cookies_str.length; i++) {
@@ -65,9 +65,9 @@ var biliZhuanLanMarkdown = {
         }
         return csrf;
     },
+    /* 功能函数: 检测 HTML 文档中是否包含图片 */
     has_loacl_images: function(html_code){
         var all = html_code.match(/src=.* \/>/g);
-        /* 如果不存在图片, 直接返回 */
         if(all == null) {
             return false;
         } else {
@@ -103,6 +103,7 @@ var biliZhuanLanMarkdown = {
             headerIds: false
         });
         this.html_text = marked(markdown_str);
+        /* 返回转换后 HTML 文本 */
         return this.html_text;
     },
     /* 核心函数: 文本计数 */
@@ -118,13 +119,14 @@ var biliZhuanLanMarkdown = {
         /* 去除所有换行符 */
         html_str = html_str.replace(/\n/g, '');
         html_str = html_str.replace(/\r\n/g, '');
+        /* 返回文本长度 */
         return html_str.length;
     },
     /* 核心函数: 获取小结 */
     getSummary: function (html_str) {
         /* 去除HTML tags */
         summary_str = html_str.replace(/<\/?[^>]*>/g, '');
-        /* 取前100字符 */
+        /* 取前100字符返回 */
         return summary_str.slice(0, 100);
     },
     /* HTML发送表单 */
@@ -145,6 +147,7 @@ var biliZhuanLanMarkdown = {
         form_data["content"] = this.html_text;
         form_data["words"]   = this.wordsCount(this.html_text);
         form_data["summary"] = this.getSummary(this.html_text);
+        /* 返回表单数据 */
         return form_data;
     },
     /* 生成图片发送表单 */
@@ -176,15 +179,15 @@ var biliZhuanLanMarkdown = {
         /* 构建图片上传表单返回 */
         var img_post_form = {
             "cover": img_to_Base64(img_url),
-            "csrf": csrf
+            "csrf":  csrf
         };
         return img_post_form;
     },
     /* 入口函数 */
     startProcess: function (md_path, p_form) {
-        /* 读取 MD 文档绝对路径*/
+        /* 读取 MD 文档绝对路径 */
         this.markdown_path = path.resolve(md_path);
-        /* 读取 MD 文档内容 */
+        /* 读取 MD 文本内容 */
         this.markdown_text = fs.readFileSync(md_path, 'utf-8');
         /* 读取配置信息 */
         this.preference_form = p_form;
@@ -215,23 +218,27 @@ var biliZhuanLanMarkdown = {
         if(all == null) {
             return;
         }
+        var pic_arr = [];
         /* 找到所有本地图片 */
         for(var i = 0; i < all.length; i++) {
             var origin = all[i].slice(all[i].indexOf('"') + 1,
                                       all[i].lastIndexOf('"'));
+            if(checkLocally(origin) == true) {
+                pic_arr.push(origin);
+            }
+        }
+        for(var i = 0; i < pic_arr.length; i++) {
             /* 使用图片绝对路径 */
             var abs_path = path.resolve(path.dirname(this.markdown_path),
-                                        origin);
-            if(checkLocally(origin) == true) {
+                                        pic_arr[i]);
                 /* 生成图片上传表单 */
                 var img_form = this.imagesFormGenerate(abs_path);
                 /* 取图片特征值作图片ID */
                 var img_id = img_form["cover"].slice(-50, -30);
                 /* 图片地址存入本地图片暂存区 */
-                this.image_local_urls.push([ img_id, origin ]);
+                this.image_local_urls.push([ img_id, pic_arr[i] ]);
                 /* 上传图片至B站服务器 */
                 this.postRequest(img_form, "image");
-            }
         }
     },
     /* 将HTML中的本地图片地址替换为B站图片地址 */
@@ -326,9 +333,13 @@ new Promise(function(resolve, reject) {
         });
         res.on('end', function(chunk) {
             body = JSON.parse(body.toString());
-            if(body.data.url != undefined) {
+            if(body.code == 0) {
                 /* 返回格式化字符串 */
                 resolve(img_id + "," + body.data.url);
+            }
+            else {
+                throw("Error: Image uploads unsuccessful...");
+                console.log(body);
             }
         });
     });
