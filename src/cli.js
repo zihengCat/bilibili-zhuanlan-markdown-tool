@@ -1,5 +1,5 @@
 /*
- * bilibili Zhuanlan Markdown Tool - UpLoader CLI
+ * Bilibili Zhuanlan Markdown Tool - CLI
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool

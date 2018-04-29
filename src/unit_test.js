@@ -1,10 +1,18 @@
 /*
- * bilibili Zhuanlan Markdown Tool - Unit Test
+ * Bilibili Zhuanlan Markdown Tool - Unit Test
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
+/*----------------------------------------------------------------*/
+/* 测试初始化函数 */
+function initStatus_test() {
+    var test_cookies = {
+        "cookies": "sid=i5ich24k; DedeUserID=1584633; DedeUserID__ckMd5=f762b0c61c31debe; bili_jct=093b4349f33a8e7de152d89919daae2f; SESSDATA=214dbb5b%2C1527590666%2Ca65ff583"
+    };
+    biliZhuanlanMarkdown.initStatus(test_cookies["cookies"]);
+}
 /* 测试 Markdown 转换 HTML 功能 */
 function md2html_test() {
     if (biliZhuanlanMarkdown.md2Html('# heading1')     != "<h1>heading1</h1>"
@@ -38,6 +46,7 @@ function words_count_test() {
 }
 /* 测试集合 */
 function main_test() {
+    initStatus_test();
     md2html_test();
     words_count_test();
 }

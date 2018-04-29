@@ -1,5 +1,5 @@
 /*
- * bilibili Zhuanlan Markdown Tool - UpLoader Front-end
+ * bilibili Zhuanlan Markdown Tool - Server
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool

@@ -11,16 +11,13 @@ const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
 const marked = require('marked');
-/*
- * API 说明
- * 参数:     Markdown路径(path), 配置选项(object)
- * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
- *           上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
- *           合成表单发送更新
- */
 var biliZhuanLanMarkdown = {
-    /* API 函数: 初始化(获取用户认证cookies)
-                 任何与B站服务器交互的操作都应先调用此函数初始化 */
+    /*
+     * API 说明: 初始化
+     * 参数: 用户认证cookies (字符串)
+     * 返回: 成功返回原始字符串, 失败则抛出错误
+     * 注意: 任何与B站服务器交互的操作都应先调用此函数进行初始化
+     */
     initStatus: function (cookies_str) {
         /* 检查 Cookies 是否包含关键字段 */
         if(cookies_str.match(/sid=/g) == null ||
@@ -34,8 +31,11 @@ var biliZhuanLanMarkdown = {
         this.cookies_text = cookies_str;
         return this.cookies_text;
     },
-    /* API 函数: 发送本地`Markdown`文档至B站专栏
-     *           成功无反馈，失败抛出错误
+    /*
+     * API 说明: 发送本地`Markdown`文档至B站专栏
+     * 参数: Markdown文件路径(path)
+     * 返回: 成功无反馈, 失败则抛出错误
+     * 注意: 必须先初始化
      */
     sendArticle: function (markdown_path) {
         if(this.cookies_text != ""){
@@ -59,6 +59,30 @@ var biliZhuanLanMarkdown = {
         }
         else {
             throw("Error: uninitialized");
+        }
+    },
+    /*
+     * API 说明: (保留的旧API)
+     * 参数:     Markdown路径(path), 配置选项(object)
+     * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
+     *           上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
+     *           合成表单发送更新
+     */
+    startProcess: function (md_path, cfg) {
+        /* 读取 MD 文档绝对路径 */
+        this.markdown_path = path.resolve(md_path);
+        /* 读取 MD 文本内容 */
+        this.markdown_text = fs.readFileSync(md_path, 'utf-8');
+        /* 读取配置信息 */
+        this.preference_form = cfg
+        /* 计算 csrf 值 */
+        this.preference_form['csrf'] = this.get_csrf(cfg['cookies']);
+        /* 转换 Markdown 文档为 HTML 代码 */
+        this.md2Html(this.markdown_text);
+        if(this.has_loacl_images(this.html_text) == true) {
+            biliZhuanLanMarkdown.processLocalImages();
+        } else {
+            biliZhuanLanMarkdown.postHtmlForm();
         }
     },
     /* 专栏表单数据结构 */
@@ -226,24 +250,6 @@ var biliZhuanLanMarkdown = {
             "csrf":  csrf
         };
         return img_post_form;
-    },
-    /* 入口函数 */
-    startProcess: function (md_path, p_form) {
-        /* 读取 MD 文档绝对路径 */
-        this.markdown_path = path.resolve(md_path);
-        /* 读取 MD 文本内容 */
-        this.markdown_text = fs.readFileSync(md_path, 'utf-8');
-        /* 读取配置信息 */
-        this.preference_form = p_form;
-        /* 计算 csrf 值 */
-        this.preference_form['csrf'] = this.get_csrf(p_form['cookies']);
-        /* 转换 Markdown 文档为 HTML 代码 */
-        this.md2Html(this.markdown_text);
-        if(this.has_loacl_images(this.html_text) == true) {
-            biliZhuanLanMarkdown.processLocalImages();
-        } else {
-            biliZhuanLanMarkdown.postHtmlForm();
-        }
     },
     /* 处理 HTML 中本地图片 */
     processLocalImages: function () {
