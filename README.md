@@ -10,7 +10,7 @@
 
 1. 本机安装`Node.js`环境，获取项目源码，`npm install`安装依赖。
 
-2. 取得`cookies`，写入配置文件。
+2. 取得用户认证`cookies`，写入配置文件。
 
 3. 使用`Markdown`写作。
 
@@ -70,7 +70,7 @@ $ npm run server
 
 > 图: 由`Markdown`变身的专栏文章（网页端预览）
 
-预览文章，添加头图，选择分类，写专栏推荐语，这些都是文章发布前的准备工作，就交给你手动完成啦。完成后可以提请发布文章。当然，B站是要审核的。
+预览文章，添加头图，选择分类，写专栏推荐语，这些都是文章发布前的准备工作，就交给你手动完成。完成后可以提请发布文章。当然，B站是要审核的。
 
 # Attentions（注意事项）
 
@@ -133,13 +133,13 @@ cookies ->  以下四枚 Cookie 必需, 有效期大概半个月（过期重取�
 集成该工具开发，需要先`npm install`安装，再导入`bilibili-markdown-tool`模块。
 
 ```
-npm install bilibili-markdown-tool
+npm install bilibili-markdown-tool --save
 ```
 
 | API | 说明 |
 |:----|:-----|
-| `initStatus(cookies_str)` | 初始化函数，输入用户认证`Cookie`信息  |
-| `sendArticle(markdown_path)` | 发送一篇本地`Markdown`文章至B站专栏草稿箱|
+| `initStatus(cookies_str)` | 初始化函数，接受用户认证`Cookie`信息  |
+| `sendArticle(markdown_path)` | 发送一篇本地`Markdown`文章至目标用户B站专栏草稿箱|
 
 > 表: 模块`API`接口
 

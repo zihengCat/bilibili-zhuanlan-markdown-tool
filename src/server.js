@@ -28,6 +28,7 @@ http.createServer(function (request, response) {
             var abs_cfg_path = path.resolve(__dirname,
                                '../config/config.json');
             var cfg = fs.readFileSync(abs_cfg_path, 'utf-8');
+            /* 尝试提交 */
             try {
                 /* 调用接口上传处理 */
                 var cookie = JSON.parse(cfg);
@@ -40,6 +41,7 @@ http.createServer(function (request, response) {
                 var html_success_data = fs.readFileSync(html_success_path, 'utf-8');
                 response.write(html_success_data);
             }
+            /* 出错 */
             catch(e) {
                 /* 返回失败页面 */
                 var html_success_path = path.resolve(__dirname,
@@ -48,12 +50,13 @@ http.createServer(function (request, response) {
                 response.write(html_success_data);
             }
         }
+        /* 信息不足 */
         else {
             /* 返回同页面 */
             response.write(html_data);
         }
         response.end();
     });
-}).listen(8888);
+}).listen(2233);
 /* 终端打印信息 */
-console.log('Server running at http://127.0.0.1:8888/');
+console.log('Server running at http://127.0.0.1:2233/');
