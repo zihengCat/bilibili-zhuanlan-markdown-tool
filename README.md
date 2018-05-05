@@ -29,7 +29,14 @@
 
 ## 步骤2 - 获取关键参数写配置文件
 
-这是至关重要的一步。我们需要**手动**取得关键参数：`cookies`，再写配置文件。`cookies`是用户个人身份认证信息。此工具依赖该参数与B站专栏服务器正常通信。我们可以使用**Chrome开发者工具**获取到参数。
+这是至关重要的一步。我们需要**手动**取得关键参数：`cookies`，再写配置文件。`cookies`是用户个人身份认证信息。此工具依赖该参数与B站专栏服务器正常通信。
+
+我们可以使用**Chrome开发者工具**获取到参数。具体如下：
+
+1. 前往[B站AJAX快速登录页](https://passport.bilibili.com/ajax/miniLogin/minilogin)
+2. 打开*Chrome开发者工具 -> 网络侦测器*
+3. 填写B站登录信息
+4. 从跨域跳转响应页中抓取`cookie`参数
 
 ![step2][step2]
 
@@ -122,11 +129,12 @@ $ npm run server
 更加详细的说明：
 
 ```
-cookies ->  以下四枚 Cookie 必需, 有效期大概半个月（过期重取）
+cookies ->  以下 Cookie 必需，有效期大约半月（过期重取）
+            "sid"
             "DedeUserID"
             "DedeUserID__ckMd5"
-            "SESSDATA"
             "bili_jct"
+            "SESSDATA"
 ```
 
 # Develop（开发相关）
