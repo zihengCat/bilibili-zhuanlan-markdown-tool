@@ -60,7 +60,7 @@
 
 我们运行命令来启动工具前端窗口，填入相关参数，点击提交，如果反馈成功，则说明提交成功。
 
-```
+```bash
 $ npm run server
 ```
 
@@ -141,8 +141,8 @@ cookies ->  以下 Cookie 必需，有效期大约半月（过期重取）
 
 集成该工具开发，需要先`npm install`安装，再导入`bilibili-markdown-tool`模块。
 
-```
-npm install bilibili-markdown-tool --save
+```bash
+$ npm install bilibili-markdown-tool --save
 ```
 
 | API | 说明 |
