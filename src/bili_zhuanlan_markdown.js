@@ -62,7 +62,7 @@ var biliZhuanLanMarkdown = {
         }
     },
     /*
-     * API 说明: (保留的旧API)
+     * API 说明: 保留API
      * 参数:     Markdown路径(path), 配置选项(object)
      * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
      *           上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
@@ -87,21 +87,21 @@ var biliZhuanLanMarkdown = {
     },
     /* 专栏表单数据结构 */
     formdata_template: {
-        "title": "",       /* 自动生成 */
-        "banner_url": "",
-        "content": "",     /* 自动生成 */
-        "summary": "",     /* 自动生成 */
-        "words": 0,        /* 自动生成 */
-        "category": 0,
-        "list_id": 0,
+        "title": "",       /* 文章标题(自动生成) */
+        "banner_url": "",  /* 文章头图(可为空) */
+        "content": "",     /* 文章HTML内容(自动生成) */
+        "summary": "",     /* 文章小结(自动生成) */
+        "words": 0,        /* 文章字数(自动生成) */
+        "category": 0,     /* 文章分类 */
+        "list_id": 0,      /* 文章文集(轻小说) */
         "tid": 0,          /* 不明 */
-        "reprint": 1,      /* 必需[0, 1] */
-        "tags": "",
+        "reprint": 1,      /* 可否复制(必需[0, 1]) */
+        "tags": "",        /* 文章标签 */
         "image_urls": "",
         "origin_image_urls": "",
-        "dynamic_intro": "",
-        // "aid": "",      /* 可有可无 */
-        "csrf": ""		   /* 自动生成 */
+        "dynamic_intro": "", /* 文章推荐语(可为空) */
+        // "aid": "",      /* 可有可无 -> 有: 修改草稿, 无: 新增草稿 */
+        "csrf": ""		   /* 跨域认证(自动生成) */
     },
     /* 用户认证 Cookies */
     cookies_text: "",
@@ -111,7 +111,7 @@ var biliZhuanLanMarkdown = {
     html_text: "",
     /* Markdown 文档路径 */
     markdown_path: "",
-    /* 配置选项 */
+    /* 用户配置选项 */
     preference_form: { },
     /* 本地图片地址暂存区 */
     image_local_urls: [ ],
@@ -133,6 +133,15 @@ var biliZhuanLanMarkdown = {
         }
         return csrf;
     },
+    /* 功能函数: 检查用户是否配置了自定义参数 */
+    check_user_config: function(key_str) {
+        if(this.preference_form[key_str] !== undefined) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    },
     /* 功能函数: 检测 HTML 文档中是否包含图片 */
     has_loacl_images: function(html_code){
         var all = html_code.match(/src=.* \/>/g);
@@ -142,7 +151,7 @@ var biliZhuanLanMarkdown = {
             return true;
         }
     },
-    /* 核心函数: Markdown 转 HTML */
+    /* 核心函数: Markdown 转 Bilibili Compatible HTML */
     md2Html: function (markdown_str) {
         /* 自定义生成器 */
         var myRenderer = new marked.Renderer();
@@ -204,10 +213,18 @@ var biliZhuanLanMarkdown = {
         for(var key in this.formdata_template) {
             form_data[key] = this.formdata_template[key];
         }
-        /* 加入用户配置数据 */
-        var title_str = path.basename(this.markdown_path);
-        title_str = title_str.slice(0, title_str.lastIndexOf('.'));
-        form_data["title"] = title_str;
+        /* 加入用户自定义配置数据 */
+        if(this.check_user_config("title") === true) {
+            /* 使用用户自定义标题 */
+            form_data["title"] = this.preference_form["title"];
+        }
+        else {
+            /* 使用默认标题 */
+            var title_str = path.basename(this.markdown_path);
+            title_str = title_str.slice(0, title_str.lastIndexOf('.'));
+            form_data["title"] = title_str;
+        }
+        // console.log(form_data["title"]);
         // form_data["tid"]   = pform["tid"];
         // form_data["aid"]   = pform["aid"];
         form_data["csrf"]  = pform["csrf"];
