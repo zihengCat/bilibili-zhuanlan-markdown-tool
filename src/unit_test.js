@@ -5,7 +5,9 @@
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
-/*----------------------------------------------------------------*/
+
+//var bl = biliZhuanlanMarkdown.biliZhuanlanMarkdown;
+
 /* 测试初始化函数 */
 function initStatus_test() {
     var test_cookies = {

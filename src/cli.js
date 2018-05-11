@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Bilibili Zhuanlan Markdown Tool - CLI
  * Author: zihengCat
