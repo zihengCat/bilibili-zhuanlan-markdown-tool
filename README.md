@@ -17,6 +17,16 @@
 
 4. 使用**前端页面**或**命令行工具**提交`Markdown`文章。
 
+# Work Flow（工作原理）
+
+B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。无论是使用B站富文本编辑器还是`Markdown`，最终都会转换为`HTML`上传至B站服务器保存，并在用户需要时调取展示。
+
+此工具完成的任务，便是将`Markdown`转换为`bilibili compatible HTML`，再上传至B站服务器。
+
+![work_flow][work_flow]
+
+> 图: 工作原理示意图
+
 # Example（实例讲解）
 
 下面将通过一个实例，详细讲解如何使用此工具。
@@ -116,11 +126,11 @@ $ npm run server
 
 当然，如果你想为你的`Markdown`文章添加B站专有功能，完全可以在使用此工具提交后回到B站专栏富文本编辑器中手动修改。
 
-# Configure（配置选项）
+# Configurations（配置选项）
 
-此工具的`json`配置文件非常简单，就像这样:
+此工具的`json`配置文件非常简单，取得个人用户的`cookies`填入即可，就像这样：
 
-```
+```json
 {
   "cookies": ""
 }
@@ -137,7 +147,7 @@ cookies ->  以下 Cookie 必需，有效期大约半月（过期重取）
             "SESSDATA"
 ```
 
-# Develop（开发相关）
+# Development（开发相关）
 
 集成该工具开发，需要先`npm install`安装，再导入`bilibili-markdown-tool`模块。
 
@@ -147,20 +157,28 @@ $ npm install bilibili-markdown-tool --save
 
 | API | 说明 |
 |:----|:-----|
-| `initStatus(cookies_str)` | 初始化函数，接受用户认证`Cookie`信息  |
-| `sendArticle(markdown_path)` | 发送一篇本地`Markdown`文章至目标用户B站专栏草稿箱|
-| `startProcess(markdown_path, config_object)` | 以上两函数的综合，接受`Markdown`路径与用户自定义配置选项 |
+| `startProcess(markdown_path, config_object)` | 上传`Markdown`文件至B站专栏草稿箱，接受`Markdown`文件路径与用户自定义配置选项 |
 
 > 表: 模块`API`接口表
+
+# Dependences（依赖相关）
+
+[marked][https://github.com/markedjs/marked]
+
+> A markdown parser and compiler. Built for speed.
+
+![marked][marked]
 
 # License（许可协议）
 
 [MIT](./LICENSE)
 
-[bilixmd]: ./docs/bilixmd.png
-[step2]:   ./docs/step2.png
-[step3]:   ./docs/step3.png
-[step4_1]: ./docs/step4_1.png
-[step4_2]: ./docs/step4_2.png
-[step4_3]: ./docs/step4_3.png
+[bilixmd]:   ./docs/bilixmd.png
+[work_flow]: ./docs/work_flow.png
+[step2]:     ./docs/step2.png
+[step3]:     ./docs/step3.png
+[step4_1]:   ./docs/step4_1.png
+[step4_2]:   ./docs/step4_2.png
+[step4_3]:   ./docs/step4_3.png
+[marked]: https://marked.js.org/img/logo-black.svg
 
