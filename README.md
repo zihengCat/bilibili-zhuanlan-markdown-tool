@@ -163,9 +163,9 @@ $ npm install bilibili-markdown-tool --save
 
 # Dependences（依赖相关）
 
-[marked](https://github.com/markedjs/marked)
+- [marked](https://github.com/markedjs/marked)
 
-![marked](https://marked.js.org/img/logo-black.svg)
+![marked][marked]
 
 > A markdown parser and compiler. Built for speed.
 
@@ -180,4 +180,5 @@ $ npm install bilibili-markdown-tool --save
 [step4_1]:   ./docs/step4_1.png
 [step4_2]:   ./docs/step4_2.png
 [step4_3]:   ./docs/step4_3.png
+[marked]:    ./docs/marked.png
 
