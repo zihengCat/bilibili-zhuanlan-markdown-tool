@@ -13,6 +13,7 @@ const https = require('https');
 const querystring = require('querystring');
 const marked = require('marked');
 /*
+ *
  */
 class biliZhuanlanMarkdown {
     constructor(user_cfg_obj = { }) {
@@ -66,6 +67,7 @@ class biliZhuanlanMarkdown {
             /* 加入 Markdown 文档为 HTML 代码 */
             this.hidden_content.html_text =
                  this._markdown_to_html(this.hidden_content.markdown_text);
+            console.log(this._html_form_generate());
         }
         else {
             throw("Error");
@@ -126,12 +128,12 @@ class biliZhuanlanMarkdown {
         /* 自定义生成器 */
         var myRenderer = new marked.Renderer();
         /* 覆写`标题`生成规则 */
-        myRenderer.heading = function (text, level) {
+        myRenderer.heading = function(text, level) {
             return '<h' + level + '>' + text +
                    '</h' + level + '>';
         }
         /* 覆写`图片`生成规则 */
-        myRenderer.image = function (href, title, text) {
+        myRenderer.image = function(href, title, text) {
             return '<figure class="img-box">' +
                    '<img src="%src" />'.replace("%src", href) +
                    '<figcaption class="caption">%t</figcaption>'.replace(
@@ -139,7 +141,7 @@ class biliZhuanlanMarkdown {
                    '</figure>';
         }
         /* 覆写`删除线`生成规则 */
-        myRenderer.del = function (text) {
+        myRenderer.del = function(text) {
             return '<span style="text-decoration: line-through;">' + text +
                    '</span>';
         }
@@ -153,7 +155,7 @@ class biliZhuanlanMarkdown {
         return marked(markdown_str);
     }
     /* 核心函数: 文本计数 */
-    _html_words_count (html_str) {
+    _html_words_count(html_str) {
         /* 去除HTML tags */
         html_str = html_str.replace(/<\/?[^>]*>/g, '');
         /* 去除行尾空白 */
@@ -169,32 +171,35 @@ class biliZhuanlanMarkdown {
         return html_str.length;
     }
     /* 核心函数: 获取小结 */
-    _html_get_summary (html_str) {
+    _html_get_summary(html_str) {
         /* 去除HTML tags */
-        summary_str = html_str.replace(/<\/?[^>]*>/g, '');
-        /* 取前100字符返回 */
+        var summary_str = html_str.replace(/<\/?[^>]*>/g, '');
+        /* 去除所有换行符 */
+        summary_str = summary_str.replace(/\n/g, '');
+        summary_str = summary_str.replace(/\r\n/g, '');
+        /* 取前100字符 */
         return summary_str.slice(0, 100);
     }
     /* 核心函数: 生成HTML发送表单 */
-    _html_form_generate(md_str, user_cfg) {
-        /* 深拷贝模版数据 */
+    _html_form_generate() {
+        /* 深拷贝表单模版 */
         var form_data = { };
         for(var key in this.form_template) {
             form_data[key] = this.form_template[key];
         }
-        /* 加入用户自定义配置数据 */
+        /* 加入用户自定义配置 */
         if(this._check_user_config("title") === true) {
             /* 使用用户自定义标题 */
             form_data["title"] = this.user_config["title"];
         }
         else {
             /* 使用默认标题(Markdown文件名) */
-            var title_str = path.basename(this.markdown_path);
+            var title_str = path.basename(this.hidden_content.markdown_path);
             title_str = title_str.slice(0, title_str.lastIndexOf('.'));
             form_data["title"] = title_str;
         }
-        /* 加入csrf */
-        form_data["csrf"]  = this.user_config["csrf"];
+        /* 加入 csrf 值 */
+        form_data["csrf"]  = this.hidden_content["csrf"];
         /* 覆写目标数据 */
         var h_text = this.hidden_content.html_text;
         form_data["content"] = h_text;
@@ -202,6 +207,56 @@ class biliZhuanlanMarkdown {
         form_data["summary"] = this._html_get_summary(h_text);
         /* 返回表单数据 */
         return form_data;
+    }
+    /* 核心函数: 提交表单数据 */
+    postForm(form_data, flag_str) {
+        /* 公共头部 */
+        var post_option = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            /* 计算文档长度 */
+            'Content-Length': Buffer.byteLength(querystring.stringify(form_data)),
+            /* 不跟踪 */
+            'DNT': '1',
+            /* 来源B站 */
+            'Origin': 'https://member.bilibili.com',
+            /* 构建 Referer 头 */
+            'Referer': 'https://member.bilibili.com/article-text/home?aid=',
+            /* 构建 UA 选项 */
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+            /* 构建 Cookie */
+            'Cookie': this.user_config["cookies"]
+            }
+        }
+        if (flag_str === "html") {
+            /* B站专栏 HTML 提交服务器 */
+            post_option.host = 'api.bilibili.com'
+            post_option.path = '/x/article/creative/draft/addupdate';
+            /* 请求结构 */
+            var req = http.request(post_option, function(res) {
+                console.log("StatusCode: ", res.statusCode);
+                //console.log("Headers: ", JSON.stringify(res.headers));
+                res.setEncoding('utf-8');
+                res.on('data', function(chunk) {
+                    console.log("Data: " + chunk);
+                });
+                res.on('end', function(chunk) {
+                    //console.log("Status: Successful!");
+                });
+            });
+            req.on('error', function(e){
+                console.log("Error: " + e.message);
+            });
+            /* 序列化表单数据 */
+            req.write(querystring.stringify(form_data));
+            /* 发送请求 */
+            req.end();
+        }
     }
 };
 module.exports = biliZhuanlanMarkdown;

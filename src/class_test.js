@@ -14,8 +14,5 @@ if(args.length != 1) {
     var abs_cfg_full_path = path.resolve(__dirname, '../config/config.json');
     var cfg = fs.readFileSync(abs_cfg_full_path, 'utf-8');
     var b = new biliMarkdownClass(JSON.parse(cfg));
-    console.log(b);
     b.sendArticle(args[0]);
-    console.log(b);
 }
-
