@@ -165,9 +165,9 @@ $ npm install bilibili-markdown-tool --save
 
 - [marked](https://github.com/markedjs/marked)
 
-![marked][marked]
-
 > A markdown parser and compiler. Built for speed.
+
+![marked][marked]
 
 # License（许可协议）
 
