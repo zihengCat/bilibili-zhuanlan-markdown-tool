@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "server": "node src/server.js",
-    "test":   "node src/unit_test.js"
+    "test": "node src/unit_test.js"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool"
+    "type": "git",
+    "url": "https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool"
   },
   "author": "zihengCat",
   "license": "MIT",
