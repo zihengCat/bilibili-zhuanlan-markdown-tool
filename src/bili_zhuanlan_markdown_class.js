@@ -39,6 +39,33 @@ class biliZhuanlanMarkdown {
             // "aid": "",      /* 可有可无 => 有: 修改草稿, 无: 新增草稿 */
             "csrf": ""		   /* 跨域认证(自动生成) */
         };
+        /* 公共提交头 */
+        this.post_option_template = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+            'Connection': 'keep-alive',
+            /* 表单类型 */
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            /* 文档长度 */
+            'Content-Length': '',
+               // Buffer.byteLength(querystring.stringify(form_data)),
+            /* 不跟踪 */
+            'DNT': '1',
+            /* 来源B站 */
+            'Origin': 'https://member.bilibili.com',
+            /* 构建 Referer 头 */
+            'Referer': 'https://member.bilibili.com/article-text/home?',
+                //  + 'aid=' + aid,
+            /* 构建 UA 选项 */
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+            /* 构建 Cookie */
+            'Cookie': '',
+                //this.user_config["cookies"]
+            }
+        }
         /* 用户自定义数据 */
         this.user_config = user_cfg_obj;
         /* 中间数据 */
@@ -56,6 +83,16 @@ class biliZhuanlanMarkdown {
             /* 跨域访问 csrf */
             csrf: ""
         };
+    }
+    /* API函数: 上传本地图片 */
+    uploadImage(img_path) {
+        if(this._check_cookies(this.user_config.cookies) === true)
+        {
+            this.postHTMLForm(img_path, "image");
+        }
+        else {
+            throw("Error");
+        }
     }
     /* API函数: 发送文章 */
     sendArticle(md_path) {
@@ -227,47 +264,62 @@ class biliZhuanlanMarkdown {
         return form_data;
     }
     /* 核心函数: 提交表单数据 */
-    postHTMLForm(form_data, flag_str) {
-        /* 公共头部 */
-        var post_option = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
-            'Connection': 'keep-alive',
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            /* 计算文档长度 */
-            'Content-Length': Buffer.byteLength(querystring.stringify(form_data)),
-            /* 不跟踪 */
-            'DNT': '1',
-            /* 来源B站 */
-            'Origin': 'https://member.bilibili.com',
-            /* 构建 Referer 头 */
-            'Referer': 'https://member.bilibili.com/article-text/home?',
-            /* 功能选项 `aid` */
-            /* 构建 UA 选项 */
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
-            /* 构建 Cookie */
-            'Cookie': this.user_config["cookies"]
-            }
-        }
+    postHTMLForm(src, flag_str) {
         if (flag_str === "image") {
-            /* 图片提交头 */
-            post_option.host = 'member.bilibili.com'
-            post_option.path = '/x/web/article/upcover';
-            post_option.headers['X-Requested-With'] = 'XMLHttpRequest';
-            this._post_image_form(form_data, post_option);
+            this._post_html_form(this._image_form_generate(src),
+                                 flag_str,
+                                 this._image_bili_process);
         }
         if (flag_str === "article") {
-            /* B站专栏提交API */
-            post_option.host = 'api.bilibili.com'
-            post_option.path = '/x/article/creative/draft/addupdate';
+        }
+    }
+    _post_html_form(form_data, flag_str, callback) {
+        /* 深拷贝公共提交头部 */
+        var post_option = { };
+        for(var key in this.post_option_template) {
+            post_option[key] = this.post_option_template[key];
+        }
+        if (flag_str === "image") {
+            /* B站专栏图片提交 API */
+            post_option.host = 'member.bilibili.com'
+            post_option.path = '/x/web/article/upcover';
+            post_option.headers['Content-Length'] =
+                Buffer.byteLength(querystring.stringify(form_data));
+            post_option.headers['Cookie'] = this.user_config["cookies"];
+            post_option.headers['X-Requested-With'] = 'XMLHttpRequest';
             /* 请求结构 */
             var req = http.request(post_option, function(res) {
+                res.setEncoding('utf-8');
                 console.log("StatusCode: ", res.statusCode);
                 //console.log("Headers: ", JSON.stringify(res.headers));
+                res.on('data', function(chunk) {
+                    //console.log("Data: " + chunk);
+                    callback(chunk);
+                });
+                res.on('end', function(chunk) {
+                    //console.log("Successful!");
+                });
+            });
+            req.on('error', function(e){
+                console.error("Error: " + e.message);
+            });
+            /* 序列化表单数据 */
+            req.write(querystring.stringify(form_data));
+            /* 发送请求 */
+            req.end();
+        }
+        if (flag_str === "article") {
+            /* B站专栏提交 API */
+            post_option.host = 'api.bilibili.com'
+            post_option.path = '/x/article/creative/draft/addupdate';
+            post_option.headers['Content-Length'] =
+                Buffer.byteLength(querystring.stringify(form_data));
+            post_option.headers['Cookie'] = this.user_config["cookies"];
+            /* 请求结构 */
+            var req = http.request(post_option, function(res) {
                 res.setEncoding('utf-8');
+                console.log("StatusCode: ", res.statusCode);
+                //console.log("Headers: ", JSON.stringify(res.headers));
                 res.on('data', function(chunk) {
                     console.log("Data: " + chunk);
                 });
@@ -284,40 +336,59 @@ class biliZhuanlanMarkdown {
             req.end();
         }
     }
-    /* 核心函数: 上传图片至B站服务器 */
-    _post_image_form(image_form_data, post_option) {
-        /* Promise 执行 */
-        new Promise(function(resolve, reject) {
-            var body = [ ];
-            var req = http.request(post_option, function(res) {
-                console.log("StatusCode: ", res.statusCode);
-                //console.log("Headers: ", JSON.stringify(res.headers));
-                res.setEncoding('utf-8');
-                res.on('data', function(chunk) {
-                    /* 获取返回JSON */
-                    body.push(chunk);
-                    //console.log("Body: \n" + chunk);
-                });
-                res.on('end', function(chunk) {
-                    body = JSON.parse(body.toString());
-                    if(body.code === 0) {
-                        /* 返回格式化字符串 */
-                        resolve(img_id + "," + body.data.url);
-                    }
-                    else {
-                        throw("Error: image uploads failed");
-                    }
-                });
-            });
-            req.on('error', function(e){
-                console.log("Error: " + e.message);
-            });
-            req.write(querystring.stringify(form_data));
-            req.end();
-        }).then(function(result){
-            //biliZhuanLanMarkdown.image_bili_urls.push(result);
-            //biliZhuanLanMarkdown.repalceLocalImgURLs();
-        });
+    /* 功能函数: 图片处理 */
+    _image_bili_process(bili_image_json) {
+        /* 类型: JSON字符串 =>
+		{ "code": 0,
+		  "data": { "size": 157107,
+                    "url": "" },
+          "message": "0",
+          "ttl": 1
+        }
+        */
+        var img_res = JSON.parse(bili_image_json);
+        /* 图片上传成功 */
+        if(img_res['code'] === 0) {
+            console.log(img_res.data.url);
+            return img_res.data.url;
+        }
+        else {
+            throw("Error: image uploads fail");
+        }
+    }
+    /* 功能函数: 图片转 Base64 编码 */
+    _image_to_base64(img_src) {
+        /*  图片 Base64 格式头 */
+        /*  .png  => data:image/png;base64,
+            .jpeg => data:image/jpeg;base64,
+            .gif  => data:image/gif;base64,  */
+        if(img_src.indexOf('http') !== 0) {
+            var img_prefix = "";
+            var img_data = fs.readFileSync(img_src);
+            var img_base64 = img_data.toString('base64');
+            if(path.extname(img_src) == '.png') {
+                img_prefix = "data:image/png;base64,";
+            }
+            else if(path.extname(img_src) == '.jpg' ||
+                    path.extname(img_src) == '.jpeg')
+            {
+                img_prefix = "data:image/jpeg;base64,";
+            }
+            else if(path.extname(img_src) == '.gif') {
+                img_prefix = "data:image/gif;base64,";
+            }
+            return img_prefix + img_base64;
+        }
+    }
+    /* 生成图片发送表单 */
+    _image_form_generate(abs_img_src) {
+        /* 构建图片上传表单返回 */
+        var img_post_form = {
+            "cover": this._image_to_base64(abs_img_src),
+            "csrf":  this._get_csrf(this.user_config["cookies"])
+        };
+        //console.log(img_post_form);
+        return img_post_form;
     }
 };
 module.exports = biliZhuanlanMarkdown;

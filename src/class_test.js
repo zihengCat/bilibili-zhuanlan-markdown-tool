@@ -14,5 +14,9 @@ if(args.length != 1) {
     var abs_cfg_full_path = path.resolve(__dirname, '../config/config.json');
     var cfg = fs.readFileSync(abs_cfg_full_path, 'utf-8');
     var b = new biliMarkdownClass(JSON.parse(cfg));
-    b.sendArticle(args[0]);
+    /* 测试MD上传 */
+    //b.sendArticle(args[0]);
+    /* 测试图片上传 */
+    //b.postHTMLForm(args[0], "image");
+    //b.uploadImage(args[0]);
 }
