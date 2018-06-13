@@ -1,4 +1,4 @@
-# bilibili-zhuanlan-markdown-tool
+# Bilibili zhuanlan Markdown-Tool
 
 [![NPM](https://img.shields.io/npm/v/bilibili-zhuanlan-markdown-tool.svg?style=flat)](https://www.npmjs.com/package/bilibili-zhuanlan-markdown-tool)
 [![Build Status](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool.svg?branch=master)](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool)
@@ -25,7 +25,7 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 
 ![work_flow][work_flow]
 
-> 图: 工作原理示意图
+> 图：工作原理示意图
 
 # Example（实例讲解）
 
@@ -33,7 +33,9 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 
 ## 步骤1 - 安装环境与获取源码
 
-此工具使用`Node.js`写成，要想使用它，你需要先在本机上安装好`Node.js`环境。
+此工具使用`Node.js`写成，要想使用它，需要先在本机上安装好`Node.js`环境。
+
+> `Node.js`官网：https://nodejs.org/
 
 获取 GitHub 上的项目源码，可以使用`git clone`，也可以直接下载`zip`压缩包。对于`Node.js`项目，我们一般使用`npm install`来安装项目依赖。
 
@@ -45,12 +47,12 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 
 1. 前往[B站AJAX快速登录页](https://passport.bilibili.com/ajax/miniLogin/minilogin)
 2. 打开*Chrome开发者工具 -> 网络侦测器*
-3. 填写B站登录信息
+3. 填写B站登录信息与验证码
 4. 从跨域跳转响应页中抓取`cookie`参数
 
 ![step2][step2]
 
-> 图: 获取`cookies`参数
+> 图：获取`cookies`参数
 
 将取得的关键参数写入到`./config/config.json`配置文件中，格式可以参考模版或配置选项。
 
@@ -60,7 +62,7 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 
 ![step3][step3]
 
-> 图: 写`Markdown`文章
+> 图：撰写`Markdown`文章
 
 ## 步骤4 - 提交文章
 
@@ -76,25 +78,25 @@ $ npm run server
 
 ![step4_1][step4_1]
 
-> 图: 工具前端页面
+> 图：工具前端页面
 
 ![step4_2][step4_2]
 
-> 图: 提交成功反馈页面
+> 图：提交成功反馈页面
 
 现在我们可以回到B站专栏草稿箱看看。这篇`Markdown`格式的文章已经**变身**成为B站专栏文章了，排版、样式准确无误，静静地躺在专栏草稿箱中，专栏文章的标题是`Markdown`文件名。
 
 ![step4_3][step4_3]
 
-> 图: 由`Markdown`变身的专栏文章（网页端预览）
+> 图：由`Markdown`变身的专栏文章（网页端预览）
 
-预览文章、添加头图、选择分类、撰写专栏推荐语，这些都是文章发布前的准备工作，你可以手动完成。完成后就可以提请发布文章。当然，B站要先审核的。
+预览文章、添加头图、选择分类、撰写专栏推荐语，这些都是文章发布前的准备工作，你可以手动完成。完成后就可以提请发布文章。当然，B站要审核文章的。
 
 # Attentions（注意事项）
 
 这里有一些注意事项你一定要了解。
 
-## 不支持的Markdown语法
+## 不支持的 Markdown 语法
 
 目前，B站专栏所能提供的功能选项还非常有限，甚至连`Markdown`基本语法标准都无法达到完全支持。对于下列`Markdown`语法项（甚至是常用选项），B站专栏目前还无法提供支持。对于扩展`Markdown`功能，更是没有可能。
 
@@ -139,7 +141,7 @@ $ npm run server
 </div>
 ```
 
-> 注：标注为（可用）的语法项其实B站专栏也是支持的，只是B站不想让你用而已...
+> 注：标注为（可用）的语法项其实B站专栏后端也是支持的，只是B站不想让你用...
 
 如果你考虑将`Markdown`文章发布到B站专栏上，请**谨慎使用**上述语法格式，并考虑替代方案（如: 使用图片替换表格，代码块）。
 
@@ -174,7 +176,7 @@ $ npm run server
 更加详细的说明：
 
 ```
-cookies ->  以下 Cookie 必需，有效期大约半月（过期重取）
+cookies =>  以下 Cookie 必需，有效期大约半月（过期重取）
             "sid"
             "DedeUserID"
             "DedeUserID__ckMd5"
@@ -194,7 +196,7 @@ $ npm install bilibili-markdown-tool --save
 |:----|:-----|
 | `startProcess(markdown_path, config_object)` | 上传`Markdown`文件至B站专栏草稿箱，接受`Markdown`文件路径与用户自定义配置选项 |
 
-> 表: 模块`API`接口表
+> 表：模块`API`接口表
 
 # Dependences（依赖相关）
 
