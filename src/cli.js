@@ -1,10 +1,10 @@
-"use strict";
 /*
  * Bilibili Zhuanlan Markdown Tool - CLI
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
+"use strict";
 const fs = require('fs');
 const path = require('path');
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');

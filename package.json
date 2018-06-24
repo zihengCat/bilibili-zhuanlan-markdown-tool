@@ -4,6 +4,7 @@
   "description": "A useful tool for sending Markdown file to Bilibili Zhuanlan.",
   "main": "index.js",
   "scripts": {
+    "start": "node src/server.js",
     "server": "node src/server.js",
     "test": "node src/unit_test.js"
   },
@@ -14,6 +15,6 @@
   "author": "zihengCat",
   "license": "MIT",
   "dependencies": {
-    "marked": "^0.3.19"
+    "marked": "^0.4.0"
   }
 }

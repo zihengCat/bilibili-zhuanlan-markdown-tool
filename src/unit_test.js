@@ -11,17 +11,19 @@ const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
 /* 测试初始化函数 */
 function initStatus_test() {
     var test_cookies = {
-        "cookies": "sid=i5ich24k; DedeUserID=1584633; DedeUserID__ckMd5=f762b0c61c31debe; bili_jct=093b4349f33a8e7de152d89919daae2f; SESSDATA=214dbb5b%2C1527590666%2Ca65ff583"
+        "cookies":
+        "sid=i5ich24k; DedeUserID=1584633; DedeUserID__ckMd5=f762b0c61c31debe; bili_jct=654ece1b596f63ee499f6ee613ccce2c; SESSDATA=214dbb5b%2C1529949492%2C209278b7"
     };
     biliZhuanlanMarkdown.initStatus(test_cookies["cookies"]);
 }
 /* 测试 Markdown 转换 HTML 功能 */
 function md2html_test() {
-    if (biliZhuanlanMarkdown.md2Html('# heading1')     != "<h1>heading1</h1>"
-    ||  biliZhuanlanMarkdown.md2Html('## heading2')    != "<h2>heading2</h2>"
-    ||  biliZhuanlanMarkdown.md2Html('### heading3')   != "<h3>heading3</h3>"
-    ||  biliZhuanlanMarkdown.md2Html('#### heading4')  != "<h4>heading4</h4>"
-    ||  biliZhuanlanMarkdown.md2Html('##### heading5') != "<h5>heading5</h5>"
+    if (biliZhuanlanMarkdown.md2Html('# heading1').trim()      !== "<h1>heading1</h1>"
+    ||  biliZhuanlanMarkdown.md2Html('## heading2').trim()     !== "<h2>heading2</h2>"
+    ||  biliZhuanlanMarkdown.md2Html('### heading3').trim()    !== "<h3>heading3</h3>"
+    ||  biliZhuanlanMarkdown.md2Html('#### heading4').trim()   !== "<h4>heading4</h4>"
+    ||  biliZhuanlanMarkdown.md2Html('##### heading5').trim()  !== "<h5>heading5</h5>"
+    ||  biliZhuanlanMarkdown.md2Html('###### heading6').trim() !== "<h6>heading6</h6>"
     )
     {
         throw new Error("Test failed: Markdown `heading`");
@@ -46,7 +48,7 @@ function words_count_test() {
         throw new Error("Test failed: `wordsCount`");
     }
 }
-/* 测试集合 */
+/* 测试集 */
 function main_test() {
     initStatus_test();
     md2html_test();
