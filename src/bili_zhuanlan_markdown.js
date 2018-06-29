@@ -164,6 +164,14 @@ var biliZhuanLanMarkdown = {
                    '</h' + level + '>';
         }
         */
+        /* 覆写`代码块`生成规则 */
+        myRenderer.code = function (code, language) {
+            return '<figure class="code-box">' +
+                   '<pre class=language-' + language + '>' +
+                    code +
+                   '</pre>' +
+                   '</figure>';
+        }
         /* 覆写`图片`生成规则 */
         myRenderer.image = function (href, title, text) {
             return '<figure class="img-box">' +
