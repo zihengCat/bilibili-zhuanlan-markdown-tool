@@ -1,7 +1,7 @@
 {
   "name": "bilibili-zhuanlan-markdown-tool",
   "version": "1.0.6",
-  "description": "A useful tool for sending Markdown file to Bilibili Zhuanlan.",
+  "description": "A useful tool for posting `Markdown` file to bilibili zhuanlan.",
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
@@ -15,6 +15,7 @@
   "author": "zihengCat",
   "license": "MIT",
   "dependencies": {
+    "highlight.js": "^9.12.0",
     "marked": "^0.4.0"
   }
 }

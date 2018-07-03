@@ -12,6 +12,7 @@ const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
 const marked = require('marked');
+const highlight = require('highlight.js');
 var biliZhuanLanMarkdown = {
     /*
      * API 说明: 初始化
@@ -156,8 +157,9 @@ var biliZhuanLanMarkdown = {
     md2Html: function (markdown_str) {
         /* 自定义生成器 */
         var myRenderer = new marked.Renderer();
-        /* 覆写`标题`生成规则（弃用）
-          `marked` v0.4.0 已支持`headerIds`选项 */
+        /* 覆写`标题`生成规则「弃用」=>
+          `marked` v0.4.0 已支持`headerIds`选项
+         */
         /*
         myRenderer.heading = function (text, level) {
             return '<h' + level + '>' + text +
@@ -189,7 +191,11 @@ var biliZhuanLanMarkdown = {
         marked.setOptions({
             renderer: myRenderer,
             sanitize: true,    /* 内联 HTMl 功能: 禁用 */
-            headerIds: false   /* 自动生成`headerIds`功能: 禁用 */
+            headerIds: false,  /* 自动生成`headerIds`功能: 禁用 */
+            /* 支持`highlight.js`代码高亮 */
+            highlight: function (code) {
+                return highlight.highlightAuto(code).value;
+            }
         });
         this.html_text = marked(markdown_str);
         /* 返回转换后 HTML 文本 */
@@ -287,7 +293,9 @@ var biliZhuanLanMarkdown = {
     processLocalImages: function () {
         function checkLocally(src) {
             if(src.indexOf("http") == 0) {
-                return false;
+                /* 关闭外链图片功能 */
+                throw("Error: unsupported outer-linking images");
+                //return false;
             }
             else {
                 return true;
@@ -296,7 +304,7 @@ var biliZhuanLanMarkdown = {
         /* 获取所有图片地址
            格式: <img src="%src" /> */
         var all = this.html_text.match(/src=.* \/>/g);
-        /* 如果不存在图片, 直接返回(优化) */
+        /* 如果不存在图片, 直接返回「优化」 */
         if(all == null) {
             return;
         }
