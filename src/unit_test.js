@@ -48,10 +48,18 @@ function words_count_test() {
         throw new Error("Test failed: `wordsCount`");
     }
 }
-/* 测试集 */
+/* 测试集合 */
 function main_test() {
-    initStatus_test();
-    md2html_test();
-    words_count_test();
+    try {
+        initStatus_test();
+        console.log("LOG: `init` successful!");
+        md2html_test();
+        console.log("LOG: `Markdown` to `HTML` passed!");
+        words_count_test();
+        console.log("LOG: `wordsCount` passed!");
+        console.log("LOG: ALL Passed!");
+    } catch(err) {
+        console.err("ERR:" + err);
+    }
 }
 main_test();
