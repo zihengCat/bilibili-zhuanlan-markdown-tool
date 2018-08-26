@@ -12,7 +12,7 @@ const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
 const marked = require('marked');
-const highlight = require('highlight.js');
+//const highlight = require('highlight.js');
 var biliZhuanLanMarkdown = {
     /*
      * API 说明: 初始化
@@ -203,12 +203,12 @@ var biliZhuanLanMarkdown = {
             renderer: myRenderer,
             sanitize: true,    /* 内联 HTMl 功能: 禁用 */
             headerIds: false,  /* 自动生成`headerIds`功能: 禁用 */
-            /* 支持`highlight.js`代码高亮 */
+            /* 支持`highlight.js`代码高亮「弃用」*/
             /*
             highlight: function (code) {
                 return highlight.highlightAuto(code).value;
             }
-            */
+             */
         });
         this.html_text = marked(markdown_str);
         /* 返回转换后 HTML 文本 */
