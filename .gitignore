@@ -1,5 +1,6 @@
-# tests
-# config/config.json
+# Project
+#config/config.json
+package-lock.json
 
 # macOS
 .DS_Store
