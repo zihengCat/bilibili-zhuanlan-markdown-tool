@@ -3,7 +3,7 @@
 # Simple Bash Script for Detecting Images File Type
 # -------------------------------------------------
 # Author: zihengCat
-# Requirements: bash, xxd
+# Requirements: `bash`, `xxd`
 # Platform: UNIX, Linux, macOS
 # -------------------------------------------------
 if [[ ${#} != 1 ]]

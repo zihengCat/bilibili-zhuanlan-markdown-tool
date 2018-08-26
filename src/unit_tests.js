@@ -1,13 +1,13 @@
 /*
- * Bilibili Zhuanlan Markdown Tool - Unit Test
+ * Bilibili Zhuanlan Markdown Tool - Unit Tests
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
+
+"use strict";
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
-
 //var bl = biliZhuanlanMarkdown.biliZhuanlanMarkdown;
-
 /* 测试初始化函数 */
 function initStatus_test() {
     var test_cookies = {
