@@ -20,7 +20,7 @@ var biliZhuanLanMarkdown = {
      * 返回: 成功返回原始字符串, 失败则抛出错误
      * 注意: 任何与B站服务器交互的操作都应先调用此函数进行初始化
      */
-    initStatus: function (cookies_str) {
+    initStatus: function(cookies_str) {
         /* 检查 Cookies 是否包含关键字段 */
         if(cookies_str.match(/sid=/g) == null ||
            cookies_str.match(/DedeUserID=/g) == null ||
@@ -28,7 +28,7 @@ var biliZhuanLanMarkdown = {
            cookies_str.match(/bili_jct=/g) == null ||
            cookies_str.match(/SESSDATA=/g) == null )
         {
-            throw("Error: invaild cookies");
+            throw("Error: invaild `cookies`.");
         }
         this.cookies_text = cookies_str;
         return this.cookies_text;
@@ -39,7 +39,7 @@ var biliZhuanLanMarkdown = {
      * 返回: 成功无反馈, 失败则抛出错误
      * 注意: 必须先初始化
      */
-    sendArticle: function (markdown_path) {
+    sendArticle: function(markdown_path) {
         if(this.cookies_text != ""){
             /* 读取 MD 文档绝对路径 */
             this.markdown_path = path.resolve(markdown_path);
@@ -55,12 +55,13 @@ var biliZhuanLanMarkdown = {
             this.md2Html(this.markdown_text);
             if(this.has_loacl_images(this.html_text) == true) {
                 biliZhuanLanMarkdown.processLocalImages();
-            } else {
+            }
+            else {
                 biliZhuanLanMarkdown.postHtmlForm();
             }
         }
         else {
-            throw("Error: uninitialized");
+            throw("Error: Initialization fail...Please check your Configurations.");
         }
     },
     /*
@@ -102,7 +103,7 @@ var biliZhuanLanMarkdown = {
         "image_urls": "",
         "origin_image_urls": "",
         "dynamic_intro": "", /* 文章推荐语(可为空) */
-        // "aid": "",      /* 可有可无 -> 有: 修改草稿, 无: 新增草稿 */
+        // "aid": "",      /* 可有可无 => 有: 修改草稿, 无: 新增草稿 */
         "csrf": ""		   /* 跨域认证(自动生成) */
     },
     /* 用户认证 Cookies */
@@ -158,7 +159,7 @@ var biliZhuanLanMarkdown = {
         /* 自定义生成器 */
         var myRenderer = new marked.Renderer();
         /* 覆写`标题`生成规则「弃用」=>
-          `marked` v0.4.0 已支持`headerIds`选项
+          `marked v0.4.0` 已支持`headerIds`选项
          */
         /*
         myRenderer.heading = function (text, level) {
@@ -169,8 +170,10 @@ var biliZhuanLanMarkdown = {
         /* 覆写`代码块`生成规则 */
         myRenderer.code = function (code, language) {
             return '<figure class="code-box">' +
-                   '<pre class=language-' + language + '>' +
-                    code +
+                   '<pre class="language-' + language + '" ' +
+                   'data-lang="' + language + '">' +
+                   '<code class="language-${lang}">'.replace("${lang}", language)
+                   + code + '</code>' +
                    '</pre>' +
                    '</figure>';
         }
@@ -183,19 +186,29 @@ var biliZhuanLanMarkdown = {
                    '</figure>';
         }
         /* 覆写`删除线`生成规则 */
-        myRenderer.del = function (text) {
+        myRenderer.del = function(text) {
             return '<span style="text-decoration: line-through;">' + text +
                    '</span>';
         }
+        /* 覆写`分隔线`生成规则 */
+        myRenderer.hr = function() {
+            /* HardCode Here... */
+			return '<figure class="img-box">' +
+                   '<img src="${cutoff}" class="cut-off-1" />'.replace("${cutoff}",
+                   "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png") +
+                   '</figure>'
+		}
         /* 生成器配置选项 */
         marked.setOptions({
             renderer: myRenderer,
             sanitize: true,    /* 内联 HTMl 功能: 禁用 */
             headerIds: false,  /* 自动生成`headerIds`功能: 禁用 */
             /* 支持`highlight.js`代码高亮 */
+            /*
             highlight: function (code) {
                 return highlight.highlightAuto(code).value;
             }
+            */
         });
         this.html_text = marked(markdown_str);
         /* 返回转换后 HTML 文本 */
@@ -261,22 +274,28 @@ var biliZhuanLanMarkdown = {
         /* 图片转 Base64 编码 */
         function img_to_Base64(img_src) {
         /*  图片 Base64 格式头 */
-        /*  png  -> data:image/png;base64,
-            jpeg -> data:image/jpeg;base64,
-            gif  -> data:image/gif;base64,  */
+        /*  =============================
+            PNG  => data:image/png;base64,
+            JPEG => data:image/jpeg;base64,
+            GIF  => data:image/gif;base64,
+            ============================= */
             if(img_src.indexOf('http') != 0) {
                 var img_prefix = "";
                 var img_data = fs.readFileSync(img_src);
                 var img_Base64 = img_data.toString('base64');
-                if(path.extname(img_src) == '.png') {
+                if(path.extname(img_src) == '.png' ||
+                   path.extname(img_src) == '.PNG')
+                {
                     img_prefix = "data:image/png;base64,";
                 }
                 else if(path.extname(img_src) == '.jpg' ||
-                        path.extname(img_src) == '.jpeg')
+                        path.extname(img_src) == '.jpeg'||
+                        path.extname(img_src) == '.JPG')
                 {
                     img_prefix = "data:image/jpeg;base64,";
                 }
-                else if(path.extname(img_src) == '.gif') {
+                else if(path.extname(img_src) == '.gif')
+                {
                     img_prefix = "data:image/gif;base64,";
                 }
                 return img_prefix + img_Base64;
@@ -294,8 +313,8 @@ var biliZhuanLanMarkdown = {
         function checkLocally(src) {
             if(src.indexOf("http") == 0) {
                 /* 关闭外链图片功能 */
-                throw("Error: unsupported outer-linking images");
-                //return false;
+                //throw("Error: unsupported outer-linking images...");
+                return false;
             }
             else {
                 return true;
@@ -304,7 +323,7 @@ var biliZhuanLanMarkdown = {
         /* 获取所有图片地址
            格式: <img src="%src" /> */
         var all = this.html_text.match(/src=.* \/>/g);
-        /* 如果不存在图片, 直接返回「优化」 */
+        /* 优化 => 如果不存在图片, 直接返回 */
         if(all == null) {
             return;
         }
@@ -407,8 +426,9 @@ var biliZhuanLanMarkdown = {
             post_option.host = 'member.bilibili.com'
             post_option.path = '/x/web/article/upcover';
             post_option.headers['X-Requested-With'] = 'XMLHttpRequest';
-/*---------------*/
+/*--------------*/
 /* Promise 执行 */
+/*--------------*/
 new Promise(function(resolve, reject) {
     var body = [ ];
     var img_id = form_data["cover"].slice(-50, -30);
@@ -442,7 +462,7 @@ new Promise(function(resolve, reject) {
     biliZhuanLanMarkdown.image_bili_urls.push(result);
     biliZhuanLanMarkdown.repalceLocalImgURLs();
 });
-/*---------------*/
+/*--------------*/
         }
         else if (flag_str == "html") {
             /* HTML 提交头 */

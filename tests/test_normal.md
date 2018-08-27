@@ -6,6 +6,10 @@
 
 这是一篇使用`Markdown`撰写的专栏文章。
 
+---
+
+使用分隔线。
+
 # 图片
 
 ![img](./test.png)
@@ -27,9 +31,18 @@ int main(void) {
 ```
 > 代码清单：`C/C++`代码
 
+```java
+import java.lang.*;
+public class Hello {
+    public static void main(String[] args) {
+       System.out.println("Hello, world!");
+    }
+}
+```
+> 代码清单：`Java`代码
+
 ```python
 print("hello")
 ```
 > 代码清单：`Python`代码
-
 
