@@ -154,7 +154,7 @@ var biliZhuanLanMarkdown = {
             return true;
         }
     },
-    /* 核心函数: Markdown 转 Bilibili Compatible HTML */
+    /* 核心函数: `Markdown` 转 `Bilibili Compatible HTML` */
     md2Html: function (markdown_str) {
         /* 自定义生成器 */
         var myRenderer = new marked.Renderer();
@@ -168,7 +168,7 @@ var biliZhuanLanMarkdown = {
         }
         */
         /* 覆写`代码块`生成规则 */
-        myRenderer.code = function (code, language) {
+        myRenderer.code = function(code, language) {
             return '<figure class="code-box">' +
                    '<pre class="language-' + language + '" ' +
                    'data-lang="' + language + '">' +
@@ -178,7 +178,7 @@ var biliZhuanLanMarkdown = {
                    '</figure>';
         }
         /* 覆写`图片`生成规则 */
-        myRenderer.image = function (href, title, text) {
+        myRenderer.image = function(href, title, text) {
             return '<figure class="img-box">' +
                    '<img src="%src" />'.replace("%src", href) +
                    '<figcaption class="caption">%t</figcaption>'.replace(
@@ -201,7 +201,7 @@ var biliZhuanLanMarkdown = {
         /* 生成器配置选项 */
         marked.setOptions({
             renderer: myRenderer,
-            sanitize: true,    /* 内联 HTMl 功能: 禁用 */
+            sanitize: true,    /* 内联 HTML 功能: 禁用 */
             headerIds: false,  /* 自动生成`headerIds`功能: 禁用 */
             /* 支持`highlight.js`代码高亮「弃用」*/
             /*
@@ -271,7 +271,7 @@ var biliZhuanLanMarkdown = {
     },
     /* 生成图片发送表单 */
     imagesFormGenerate: function(img_url, csrf=this.preference_form["csrf"]) {
-        /* 图片转 Base64 编码 */
+        /* 功能函数: 图片转 Base64 编码 */
         function img_to_Base64(img_src) {
         /*  图片 Base64 格式头 */
         /*  =============================
@@ -351,14 +351,14 @@ var biliZhuanLanMarkdown = {
         }
     },
     /* 将HTML中的本地图片地址替换为B站图片地址 */
-    repalceLocalImgURLs: function () {
+    repalceLocalImgURLs: function() {
         function repalce_one_img(fmt_str) {
             /* 根据格式字符串取得目标信息 */
             var arr = fmt_str.split(",");
             var img_id = arr[0];
             var img_bili_url = arr[1];
             var img_local_url = "";
-            /* 根据图片ID匹配本地图片地址 */
+            /* 根据`图片ID`匹配本地图片地址 */
             for(var i = 0;
                 i < biliZhuanLanMarkdown.image_local_urls.length; i++) {
                 if(biliZhuanLanMarkdown.image_local_urls[i][0] == img_id) {

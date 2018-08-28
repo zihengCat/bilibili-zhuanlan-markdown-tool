@@ -8,11 +8,11 @@
 
 ---
 
-使用分隔线。
+使用**分隔线**。
 
 # 图片
 
-![img](./test.png)
+![Test Image](./test.png)
 
 # 引用
 
@@ -21,6 +21,11 @@
 # 代码块
 
 这是行内代码`code`。
+
+```
+Hello, you.
+```
+> 代码块测试：`plain`纯文本
 
 ```c
 #include <stdio.h>

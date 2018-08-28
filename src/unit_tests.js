@@ -4,10 +4,8 @@
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
-
 "use strict";
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
-//var bl = biliZhuanlanMarkdown.biliZhuanlanMarkdown;
 /* 测试初始化函数 */
 function initStatus_test() {
     var test_cookies = {
@@ -38,7 +36,7 @@ function md2html_test() {
     {
         throw new Error("Test failed: Markdown `strong`");
     }
-
+    console.log(biliZhuanlanMarkdown.md2Html('```plain\nhello\n```'));
 }
 /* 测试字符计数功能 */
 function words_count_test() {
