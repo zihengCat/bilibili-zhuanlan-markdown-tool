@@ -5,7 +5,7 @@
 
 ![bilixmd][bilixmd]
 
-这是一款可以让你使用`Markdown`撰写**哔哩哔哩（bilibili.com）专栏文章**的辅助工具。
+这是一款可以让你使用`Markdown`语法撰写**哔哩哔哩（bilibili.com）专栏文章**的辅助工具。
 
 # Usage（使用说明）
 
@@ -46,7 +46,7 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 我们可以使用**Chrome开发者工具**获取该参数。具体步骤如下：
 
 1. 前往[B站AJAX快速登录页](https://passport.bilibili.com/ajax/miniLogin/minilogin)
-2. 打开*Chrome开发者工具 -> 网络侦测器*
+2. 打开*Chrome开发者工具 >> 网络侦测器*
 3. 填写B站登录信息与验证码
 4. 从跨域跳转响应页中取得`cookie`参数
 
@@ -79,6 +79,7 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 ```bash
 $ npm run server
 ```
+> 代码清单：启动工具前端窗口
 
 ![step4_1][step4_1]
 
@@ -93,9 +94,10 @@ $ npm run server
 使用命令行（CLI）提交则更加简洁明了，还可以配合脚本实现批量化。
 
 ```bash
-# 绝对路径or相对路径均可
+# 绝对路径 or 相对路径均可
 $ node src/cli.js <path/to/your/markdown/file>
 ```
+> 代码清单：使用工具命令行（CLI）接口
 
 ### 发布前准备工作
 

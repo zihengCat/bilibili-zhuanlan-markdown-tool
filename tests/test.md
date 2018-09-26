@@ -30,7 +30,7 @@ Hello, you.
 ```c
 #include <stdio.h>
 int main(void) {
-    printf("hello,world");
+    printf("Hello, world!");
     return 0;
 }
 ```
@@ -47,7 +47,7 @@ public class Hello {
 > 代码清单：`Java`代码
 
 ```python
-print("hello")
+print("Hello, world!")
 ```
 > 代码清单：`Python`代码
 
