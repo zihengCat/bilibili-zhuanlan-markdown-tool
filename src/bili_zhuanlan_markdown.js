@@ -5,14 +5,15 @@
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
 "use strict";
+/* Core Standard Libraries */
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
+/* Core Third Part Library */
 const marked = require('marked');
-//const highlight = require('highlight.js');
 var biliZhuanLanMarkdown = {
     /*
      * API 说明: 初始化
@@ -28,7 +29,7 @@ var biliZhuanLanMarkdown = {
            cookies_str.match(/bili_jct=/g) == null ||
            cookies_str.match(/SESSDATA=/g) == null )
         {
-            throw("Error: invaild `cookies`.");
+            throw("Error: invaild `cookies`...");
         }
         this.cookies_text = cookies_str;
         return this.cookies_text;
@@ -36,7 +37,7 @@ var biliZhuanLanMarkdown = {
     /*
      * API 说明: 发送本地`Markdown`文档至B站专栏
      * 参数: Markdown文件路径(path)
-     * 返回: 成功无反馈, 失败则抛出错误
+     * 返回: 成功无反馈, 失败抛出错误
      * 注意: 必须先初始化
      */
     sendArticle: function(markdown_path) {
@@ -49,7 +50,7 @@ var biliZhuanLanMarkdown = {
             this.preference_form = JSON.parse('{"cookies":"' +
                                                  this.cookies_text +
                                               '"}');
-            /* 计算 csrf 值 */
+            /* 计算`csrf`值 */
             this.preference_form['csrf'] = this.get_csrf(this.cookies_text);
             /* 转换 Markdown 文档为 HTML 代码 */
             this.md2Html(this.markdown_text);
@@ -61,7 +62,7 @@ var biliZhuanLanMarkdown = {
             }
         }
         else {
-            throw("Error: Initialization fail...Please check your Configurations.");
+            throw("Error: Initialization Fail...Please check your Configurations.");
         }
     },
     /*
@@ -159,14 +160,16 @@ var biliZhuanLanMarkdown = {
         /* 自定义生成器 */
         var myRenderer = new marked.Renderer();
         /* 覆写`标题`生成规则「弃用」=>
-          `marked v0.4.0` 已支持`headerIds`选项
+          `marked v0.4.0` 现已支持`headerIds`选项
          */
+        /* ------------------------------------ */
         /*
         myRenderer.heading = function (text, level) {
             return '<h' + level + '>' + text +
                    '</h' + level + '>';
         }
         */
+        /* ------------------------------------ */
         /* 覆写`代码块`生成规则 */
         myRenderer.code = function(code, language) {
             return '<figure class="code-box">' +
@@ -203,12 +206,6 @@ var biliZhuanLanMarkdown = {
             renderer: myRenderer,
             sanitize: true,    /* 内联 HTML 功能: 禁用 */
             headerIds: false,  /* 自动生成`headerIds`功能: 禁用 */
-            /* 支持`highlight.js`代码高亮「弃用」*/
-            /*
-            highlight: function (code) {
-                return highlight.highlightAuto(code).value;
-            }
-             */
         });
         this.html_text = marked(markdown_str);
         /* 返回转换后 HTML 文本 */
@@ -273,12 +270,13 @@ var biliZhuanLanMarkdown = {
     imagesFormGenerate: function(img_url, csrf=this.preference_form["csrf"]) {
         /* 功能函数: 图片转 Base64 编码 */
         function img_to_Base64(img_src) {
-        /*  图片 Base64 格式头 */
-        /*  =============================
+        /*  -----------------------------
+                  图片 Base64 格式头
+            -----------------------------
             PNG  => data:image/png;base64,
             JPEG => data:image/jpeg;base64,
             GIF  => data:image/gif;base64,
-            ============================= */
+            ----------------------------- */
             if(img_src.indexOf('http') != 0) {
                 var img_prefix = "";
                 var img_data = fs.readFileSync(img_src);
@@ -313,7 +311,7 @@ var biliZhuanLanMarkdown = {
         function checkLocally(src) {
             if(src.indexOf("http") == 0) {
                 /* 关闭外链图片功能 */
-                //throw("Error: unsupported outer-linking images...");
+                //throw("Error: Unsupported Outer-Linking Images...");
                 return false;
             }
             else {
@@ -350,7 +348,7 @@ var biliZhuanLanMarkdown = {
                 this.postRequest(img_form, "image");
         }
     },
-    /* 将HTML中的本地图片地址替换为B站图片地址 */
+    /* 将 HTML 中的本地图片地址替换为B站图片地址 */
     repalceLocalImgURLs: function() {
         function repalce_one_img(fmt_str) {
             /* 根据格式字符串取得目标信息 */
