@@ -36,7 +36,16 @@ function md2html_test() {
     {
         throw new Error("Test failed: Markdown `strong`");
     }
-    console.log(biliZhuanlanMarkdown.md2Html('```plain\nhello\n```'));
+    if (biliZhuanlanMarkdown.md2Html('```plain\nhello\n```') !=
+    '<figure class="code-box"><pre class="language-plain" data-lang="plain"><code class="language-plain">hello</code></pre></figure>'
+    ) {
+        throw new Error("Test failed: Markdown `code block`");
+    }
+    if (biliZhuanlanMarkdown.md2Html('`hello`') !=
+    '<p><code>hello</code></p>\n'
+    ) {
+        throw new Error("Test failed: Markdown `inline code`");
+    }
 }
 /* 测试字符计数功能 */
 function words_count_test() {
@@ -50,14 +59,14 @@ function words_count_test() {
 function main_test() {
     try {
         initStatus_test();
-        console.log("LOG: `init` successful!");
+        console.log("[LOG]: `init_process` Successful!");
         md2html_test();
-        console.log("LOG: `Markdown` to `HTML` passed!");
+        console.log("[LOG]: `Markdown` to `HTML` Passed!");
         words_count_test();
-        console.log("LOG: `wordsCount` passed!");
-        console.log("LOG: ALL Passed!");
+        console.log("[LOG]: `wordsCount` Passed!");
+        console.log("[LOG]: All Unit Tests Passed!");
     } catch(err) {
-        console.err("ERR:" + err);
+        console.log("[ERR]: " + err);
     }
 }
 main_test();
