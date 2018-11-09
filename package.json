@@ -15,6 +15,6 @@
   "author": "zihengCat",
   "license": "MIT",
   "dependencies": {
-    "marked": "^0.4.0"
+    "marked": "0.5.1"
   }
 }
