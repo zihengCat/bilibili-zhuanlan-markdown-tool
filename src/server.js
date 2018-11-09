@@ -47,6 +47,8 @@ http.createServer(function(request, response) {
             }
             /* 出错 */
             catch(e) {
+                /* 打印出错信息*/
+                console.log('[ERROR]: ' + e);
                 /* 返回失败页面 */
                 var html_fail_path = path.resolve(__dirname,
                                                  '../front_end/feedback_fail.html');
@@ -56,7 +58,7 @@ http.createServer(function(request, response) {
         }
         /* 信息不足 */
         else {
-            /* 返回同页面 */
+            /* 返回相同页面 */
             response.write(html_data);
         }
         response.end();
