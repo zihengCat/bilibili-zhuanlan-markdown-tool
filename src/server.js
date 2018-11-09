@@ -5,11 +5,14 @@
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
 "use strict";
+// ---------------------------------------
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
+// ---------------------------------------
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
+// ---------------------------------------
 /* 创建 HTTP 服务器 */
 http.createServer(function(request, response) {
     /* 读取前端 HTML 页面 */
@@ -60,4 +63,4 @@ http.createServer(function(request, response) {
     });
 }).listen(2233); /* 监听端口号 => 2233 */
 /* 终端打印提示信息 */
-console.log('Server running at http://127.0.0.1:2233/');
+console.log('[INFO]: Server running at http://127.0.0.1:2233/');
