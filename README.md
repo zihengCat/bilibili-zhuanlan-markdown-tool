@@ -2,6 +2,7 @@
 
 [![NPM](https://img.shields.io/npm/v/bilibili-zhuanlan-markdown-tool.svg?style=flat)](https://www.npmjs.com/package/bilibili-zhuanlan-markdown-tool)
 [![Build Status](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool.svg?branch=master)](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool)
+[![Build status](https://ci.appveyor.com/api/projects/status/ffdmliolluxi9s51/branch/master?svg=true)](https://ci.appveyor.com/project/zihengCat/bilibili-zhuanlan-markdown-tool/branch/master)
 
 ![bilixmd][bilixmd]
 

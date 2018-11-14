@@ -4,10 +4,12 @@ version: 1.0.6-{build}
 # Test against the latest version of this Node.js version
 environment:
   matrix:
-    - nodejs_version: "6"
-    - nodejs_version: "8"
-    - nodejs_version: "10"
-    - nodejs_version: "11"
+    - nodejs_version: "6.14.4"
+    - nodejs_version: "7.10.1"
+    - nodejs_version: "8.12.0"
+    - nodejs_version: "9.11.2"
+    - nodejs_version: "10.13.0"
+    - nodejs_version: "11.1.0"
 
 # Choose Windows platforms
 platform:
