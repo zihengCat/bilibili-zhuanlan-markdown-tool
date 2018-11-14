@@ -1,27 +1,29 @@
-"use strict";
 /*
- * Bilibili Zhuanlan Markdown Tool - Class
+ * Bilibili Zhuanlan Markdown Tool - Core Class
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
+'use strict';
+/* Standard Libs */
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const http = require('http');
 const https = require('https');
 const querystring = require('querystring');
+/* Third-Part Libs */
 const marked = require('marked');
 /*
  * 类说明
- * 参数:  Markdown路径(path), 配置选项(object)
- * 流程:  取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
- *        上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
+ * 参数:  Markdown路径 => `path`, 配置选项 => `object`
+ * 流程:  取得 MD 文档与配置选项 => Markdown 转换 HTML =>
+ *        上传本地图片取得B站外链 => 替换本地图片地址为B站外链地址 =>
  *        合成表单发送更新
  */
 class biliZhuanlanMarkdown {
     constructor(user_cfg_obj = { }) {
-       /* 专栏表单数据结构 */
+        /* 专栏表单数据结构 */
         this.form_template = {
             "title": "",       /* 文章标题(自动生成) */
             "banner_url": "",  /* 文章头图(可为空) */
@@ -33,39 +35,39 @@ class biliZhuanlanMarkdown {
             "tid": 0,          /* 不明 */
             "reprint": 1,      /* 可否复制(必需[0, 1]) */
             "tags": "",        /* 文章标签 */
-            "image_urls": "",
+            "image_urls": "",  /* 头图 */
             "origin_image_urls": "",
             "dynamic_intro": "", /* 文章推荐语(可为空) */
-            // "aid": "",      /* 可有可无 => 有: 修改草稿, 无: 新增草稿 */
+            "aid": "",         /* 可有可无 => 有: 修改草稿, 无: 新增草稿 */
             "csrf": ""		   /* 跨域认证(自动生成) */
         };
         /* 公共提交头 */
         this.post_option_template = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
-            'Connection': 'keep-alive',
-            /* 表单类型 */
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            /* 文档长度 */
-            'Content-Length': '',
-               // Buffer.byteLength(querystring.stringify(form_data)),
-            /* 不跟踪 */
-            'DNT': '1',
-            /* 来源B站 */
-            'Origin': 'https://member.bilibili.com',
-            /* 构建 Referer 头 */
-            'Referer': 'https://member.bilibili.com/article-text/home?',
-                //  + 'aid=' + aid,
-            /* 构建 UA 选项 */
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
-            /* 构建 Cookie */
-            'Cookie': '',
-                //this.user_config["cookies"]
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+                'Connection': 'keep-alive',
+                /* 表单类型 */
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                /* 文档长度 */
+                'Content-Length': '',
+                   // Buffer.byteLength(querystring.stringify(form_data)),
+                /* 不跟踪 */
+                'DNT': '1',
+                /* 来源 => B站 */
+                'Origin': 'https://member.bilibili.com',
+                /* 构建 Referer 头 */
+                'Referer': 'https://member.bilibili.com/article-text/home?',
+                    //  + 'aid=' + aid,
+                /* 构建 UA 选项 */
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+                /* 构建 Cookie */
+                'Cookie': '',
+                    //this.user_config["cookies"]
             }
-        }
+        };
         /* 用户自定义数据 */
         this.user_config = user_cfg_obj;
         /* 中间数据 */

@@ -5,15 +5,18 @@
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
 "use strict";
+// ----------------------
 const fs = require('fs');
 const path = require('path');
+// ----------------------
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
+// ----------------------
 /* 分离命令行参数 */
 var args = process.argv.splice(2);
 if(args.length != 1) {
     /* 命令行参数错误 */
-    console.log("Error: Command Line argument does not fit");
-    console.log("Use: node cli.js [md_file]");
+    console.log("[ERROR]: Command Line arguments does not fit.");
+    console.log("Use: node cli.js </path/to/your/markdown/file.md>");
 } else {
     /* 读取配置文件 */
     var abs_cfg_full_path = path.resolve(__dirname, '../config/config.json');

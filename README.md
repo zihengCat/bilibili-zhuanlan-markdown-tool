@@ -1,11 +1,11 @@
-# Bilibili Zhuanlan Markdown-Tool
+# Bilibili zhuanlan Markdown-Tool
 
 [![NPM](https://img.shields.io/npm/v/bilibili-zhuanlan-markdown-tool.svg?style=flat)](https://www.npmjs.com/package/bilibili-zhuanlan-markdown-tool)
 [![Build Status](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool.svg?branch=master)](https://travis-ci.org/zihengCat/bilibili-zhuanlan-markdown-tool)
 
 ![bilixmd][bilixmd]
 
-这是一款可以让你使用`Markdown`撰写**哔哩哔哩（bilibili.com）专栏文章**的辅助工具。
+这是一款可以让你使用`Markdown`文本标记语言撰写**哔哩哔哩（bilibili.com）专栏文章**的辅助工具。
 
 # Usage（使用说明）
 
@@ -19,9 +19,9 @@
 
 # Work Flow（工作原理）
 
-B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。无论是使用B站富文本编辑器还是`Markdown`，最终都会转换为`HTML`上传至B站服务器保存，并在用户需要时调取展示。
+B站专栏文章使用`HTML`对专栏文章进行存储与展示。无论是使用B站富文本编辑器还是`Markdown`，最终都会转换为`HTML`上传至B站服务器保存，并在用户需要时调取展示。
 
-此工具完成的任务，便是将`Markdown`转换为`Bilibili Compatible HTML`，再上传至B站服务器。
+此工具完成的任务，便是将`Markdown`转换为`Bilibili Compatible HTML`，再自动上传至B站服务器。
 
 ![work_flow][work_flow]
 
@@ -29,7 +29,7 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 
 # Example（实例讲解）
 
-下面将通过一个实例，详细讲解如何使用此工具。
+下面通过一个实例，详细讲解如何使用此工具。
 
 ## 步骤1 - 安装环境与获取源码
 
@@ -46,7 +46,7 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 我们可以使用**Chrome开发者工具**获取该参数。具体步骤如下：
 
 1. 前往[B站AJAX快速登录页](https://passport.bilibili.com/ajax/miniLogin/minilogin)
-2. 打开*Chrome开发者工具 -> 网络侦测器*
+2. 打开*Chrome开发者工具 >> 网络侦测器*
 3. 填写B站登录信息与验证码
 4. 从跨域跳转响应页中取得`cookie`参数
 
@@ -79,6 +79,7 @@ B站专栏文章使用`HTML`格式对专栏文章内容进行存储与展示。�
 ```bash
 $ npm run server
 ```
+> 代码清单：启动工具前端窗口
 
 ![step4_1][step4_1]
 
@@ -93,9 +94,10 @@ $ npm run server
 使用命令行（CLI）提交则更加简洁明了，还可以配合脚本实现批量化。
 
 ```bash
-# 绝对路径or相对路径均可
+# 绝对路径 or 相对路径均可
 $ node src/cli.js <path/to/your/markdown/file>
 ```
+> 代码清单：使用工具命令行（CLI）接口
 
 ### 发布前准备工作
 

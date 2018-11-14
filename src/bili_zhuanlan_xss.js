@@ -1,5 +1,4 @@
-let JSFUCK = []["filter"]["constructor"](`
+let JS_FUCK = []["filter"]["constructor"](`
     console.log("OK");
 `);
-new JSFUCK;
-
+new JS_FUCK;

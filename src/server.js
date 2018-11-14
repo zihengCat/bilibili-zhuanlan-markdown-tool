@@ -1,16 +1,20 @@
 /*
- * bilibili Zhuanlan Markdown Tool - Server
+ * Bilibili Zhuanlan Markdown Tool - Web Server
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
+"use strict";
+// ---------------------------------------
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
+// ---------------------------------------
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
+// ---------------------------------------
 /* 创建 HTTP 服务器 */
-http.createServer(function (request, response) {
+http.createServer(function(request, response) {
     /* 读取前端 HTML 页面 */
     var html_full_path = path.resolve(__dirname, '../front_end/index.html');
     var html_data = fs.readFileSync(html_full_path, 'utf-8');
@@ -43,20 +47,22 @@ http.createServer(function (request, response) {
             }
             /* 出错 */
             catch(e) {
+                /* 打印出错信息*/
+                console.log('[ERROR]: ' + e);
                 /* 返回失败页面 */
-                var html_success_path = path.resolve(__dirname,
-                                        '../front_end/feedback_fail.html');
-                var html_success_data = fs.readFileSync(html_success_path, 'utf-8');
-                response.write(html_success_data);
+                var html_fail_path = path.resolve(__dirname,
+                                                 '../front_end/feedback_fail.html');
+                var html_fail_data = fs.readFileSync(html_fail_path, 'utf-8');
+                response.write(html_fail_data);
             }
         }
         /* 信息不足 */
         else {
-            /* 返回同页面 */
+            /* 返回相同页面 */
             response.write(html_data);
         }
         response.end();
     });
-}).listen(2233);
-/* 终端打印信息 */
-console.log('Server running at http://127.0.0.1:2233/');
+}).listen(2233); /* 监听端口号 => 2233 */
+/* 终端打印提示信息 */
+console.log('[INFO]: Server running at http://127.0.0.1:2233/');
