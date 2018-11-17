@@ -6,6 +6,7 @@
  */
 "use strict";
 const biliZhuanlanMarkdown = require('./bili_zhuanlan_markdown.js');
+const biliLoginModule = require("./bili_zhuanlan_login.js");
 /* 测试初始化函数 */
 function initStatus_test() {
     var test_cookies = {
@@ -55,16 +56,23 @@ function words_count_test() {
         throw new Error("Test failed: `wordsCount`");
     }
 }
+/* 测试网络函数 */
+function networks_test() {
+    biliLoginModule.initStatus('aaa', 'bbb');
+    biliLoginModule.__get_cookies();
+    //biliLoginModule.getCookies();
+}
 /* 测试集合 */
 function main_test() {
     try {
         initStatus_test();
-        console.log("[LOG]: `init_process` Successful!");
+        console.log("[LOG]: `init_process` Passed!");
         md2html_test();
         console.log("[LOG]: `Markdown` to `HTML` Passed!");
         words_count_test();
         console.log("[LOG]: `wordsCount` Passed!");
-        console.log("[LOG]: All Unit Tests Passed!");
+        networks_test();
+        console.log("[LOG]: `login` Passed!");
     } catch(err) {
         console.log("[ERR]: " + err);
     }
