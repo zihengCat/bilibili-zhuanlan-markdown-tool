@@ -40,12 +40,17 @@ for(var i = 0; i < args.length; ++i) {
        args[i] === "--help"
     ) {
         console.log("Bilibili zhuanlan Markdown Tool - CLI Utilities");
+        console.log("Usage:");
+        console.log("\tnode cli.js [options]");
         console.log("Options:");
         console.log("\t-h, --help\t\tShow help pages");
         console.log("\t-v, --version\t\tShow versions");
         console.log("\t-f, --file\t\tUpload `markdown_file` to bilibili-zhuanlan");
         console.log("\t-u, --username\t\tSpecify bilibili `username`");
         console.log("\t-p, --password\t\tSpecify bilibili `password`");
+        console.log("Examples:");
+        console.log("\tnode cli.js -f <path/to/markdown/file/name.md>");
+        console.log("\tnode cli.js -u <username> -p <password>");
         process.exit(0);
     }
     else if (
