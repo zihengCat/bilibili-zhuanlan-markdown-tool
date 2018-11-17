@@ -1,5 +1,5 @@
 /*
- * Bilibili Zhuanlan Markdown Tool - Web Server
+ * Bilibili zhuanlan Markdown Tool - Web Server
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool

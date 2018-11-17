@@ -96,9 +96,9 @@ $ npm run server
 
 ```bash
 # 绝对路径 or 相对路径均可
-$ node src/cli.js <path/to/your/markdown/file>
+$ node src/cli.js -f <path/to/your/markdown/file>
 ```
-> 代码清单：使用工具命令行（CLI）接口
+> 代码清单：使用命令行（CLI）工具
 
 ### 发布前准备工作
 

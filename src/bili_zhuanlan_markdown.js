@@ -1,5 +1,5 @@
 /*
- * Bilibili Zhuanlan Markdown Tool - Core
+ * Bilibili zhuanlan Markdown Tool - Core
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
@@ -73,6 +73,11 @@ var biliZhuanLanMarkdown = {
      *           合成表单发送更新
      */
     startProcess: function (md_path, cfg) {
+        if(cfg.cookies === undefined ||
+           cfg.cookies === "")
+        {
+            throw("[ERROR]: Initialization fail...Please check your Configurations.");
+        }
         /* 读取 MD 文档绝对路径 */
         this.markdown_path = path.resolve(md_path);
         /* 读取 MD 文本内容 */

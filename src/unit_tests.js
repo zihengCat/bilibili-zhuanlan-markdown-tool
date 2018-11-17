@@ -1,5 +1,5 @@
 /*
- * Bilibili Zhuanlan Markdown Tool - Unit Tests
+ * Bilibili zhuanlan Markdown Tool - Unit Tests
  * Author: zihengCat
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
