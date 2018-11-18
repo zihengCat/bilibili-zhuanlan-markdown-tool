@@ -9,7 +9,7 @@
 const http = require("http");
 const https = require("https");
 const querystring = require("querystring");
-// ----------------------------------------
+/* ----------------------- */
 var BilibiliLoginModule = {
     initStatus: function(user = "", passwd = "") {
         this.__user = user;
@@ -38,12 +38,18 @@ var BilibiliLoginModule = {
             //console.log('HEADERS: ' + JSON.stringify(res.headers));
             res.setEncoding('utf8');
             res.on('data', function (chunk) {
-                //console.log('BODY: ' + chunk);
-                //console.log(chunk);
-                var c = JSON.parse(chunk);
-                if(c.access_key !== undefined) {
-                    console.log(c.access_key);
-                    BilibiliLoginModule.__get_cookies(c.access_key);
+                if(res.statusCode === 200) {
+                    //console.log('BODY: ' + chunk);
+                    //console.log(chunk);
+                    var c = JSON.parse(chunk);
+                    if(c.access_key !== undefined) {
+                        console.log("[INFO]: access_key = " + c.access_key);
+                        BilibiliLoginModule.__get_cookies(c.access_key);
+                    }
+                }
+                else {
+                    //console.log(chunk);
+                    throw("[ERROR]: IN `get_access_key` " + res.statusCode);
                 }
             });
         });
@@ -67,11 +73,17 @@ var BilibiliLoginModule = {
             //console.log('HEADERS: ' + JSON.stringify(res.headers));
             res.setEncoding('utf8');
             res.on('data', function (chunk) {
-                console.log(chunk);
+                if(res.statusCode === 200) {
+                    console.log(chunk);
+                }
+                else {
+                    //console.log(chunk);
+                    throw("[ERROR]: IN `get_cookies` " + res.statusCode);
+                }
             });
         });
         req.on('error', function (e) {
-            console.log('problem with request: ' + e.message);
+            console.log('[ERROR]: problem with request: ' + e.message);
         });
         req.end();
     },

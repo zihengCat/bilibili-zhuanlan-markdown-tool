@@ -11,7 +11,6 @@ const path = require('path');
 // ----------------------
 const biliZhuanlanMarkdown = require("./bili_zhuanlan_markdown.js");
 const biliLoginModule = require("./bili_zhuanlan_login.js");
-// ----------------------
 /* 分离命令行参数 */
 var args = process.argv.splice(2);
 var username = "";
@@ -64,13 +63,14 @@ for(var i = 0; i < args.length; ++i) {
 if(username !== "" &&
    password !== "")
 {
-    console.log("[INFO]: Geting `cookies`...");
+    console.log("[INFO]: username = " + username);
+    console.log("[INFO]: password = " + password);
+    console.log("[INFO]: geting bilibili user specified `cookies`...");
     biliLoginModule.initStatus(username, password);
     biliLoginModule.getCookies();
-    process.exit(0);
 }
 if(markdown_file !== "") {
-    //console.log("[INFO]: Sending ...");
+    console.log("[INFO]: Sending markdown files...");
     let uploads_markdown_file = function(markdown_file) {
         // 读取配置文件
         let abs_cfg_full_path = path.resolve(__dirname, '../config/config.json');
@@ -86,8 +86,8 @@ if(markdown_file !== "") {
     uploads_markdown_file(markdown_file);
     process.exit(0);
 }
-if(username === "" ||
-   password === "" ||
+if(username === "" &&
+   password === "" &&
    markdown_file === "")
 {
     console.log("[ERROR]: Command-Line arguments does not fit.");
