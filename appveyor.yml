@@ -1,22 +1,25 @@
+# --------------------
 # Commented sections below can be used to run tests on the CI server
+# --------------------
 version: 1.0.6-{build}
 # --------------------
 # Test against the latest version of this Node.js version
+# --------------------
 environment:
   matrix:
-    - nodejs_version: "6.14.4"
-    - nodejs_version: "7.10.1"
-    - nodejs_version: "8.12.0"
-    - nodejs_version: "9.11.2"
-    - nodejs_version: "10.13.0"
-    - nodejs_version: "11.2.0"
+    - nodejs_version: "6.15.0"
+    - nodejs_version: "8.14.0"
+    - nodejs_version: "10.14.0"
+    - nodejs_version: "11.3.0"
 # --------------------
 # Choose Windows platforms
+# --------------------
 platform:
   - x86
   - x64
 # --------------------
 # Install scripts. (runs after repo cloning)
+# --------------------
 install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
@@ -27,9 +30,11 @@ install:
   - npm install
 # --------------------
 # Post-install test scripts.
+# --------------------
 test_script:
   # run tests
   - npm run test
 # --------------------
 # Don't actually build.
+# --------------------
 build: off
