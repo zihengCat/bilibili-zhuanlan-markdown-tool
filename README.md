@@ -156,9 +156,9 @@ $ node src/cli.js -f <path/to/your/markdown/file>
 <div>
 </div>
 ```
-> 注：标注为「可用」的语法项其实B站专栏后端也是支持的，只是B站没有开放
+> 注：标注为「可用」的语法项B站专栏后端也支持，只是目前暂未开放
 
-如果你考虑将`Markdown`文章发布到B站专栏上，请**谨慎使用**上述语法格式，并考虑替代方案「如：使用图片替换表格」。
+如果你考虑将`Markdown`文章发布到B站专栏上，请**谨慎使用**上述语法格式，并考虑替代方案（如：使用图片替换表格）。
 
 ## 专有功能
 
@@ -170,13 +170,13 @@ $ node src/cli.js -f <path/to/your/markdown/file>
 - 图片分割线
 - 站内选项卡
 
-这些选项大多没有合适的`Markdown`语法与之对应，实现方式只能通过**内联HTML**。
+这些选项大多没有合适的`Markdown`语法与之对应，实现方式是通过**内联HTML**。
 
-分析B站专栏文章页面结构，这些专有功能大多是通过`class样式 + 行内css样式`实现，并不具备可移植性，也不符合**结构与样式分离**原则。
+分析B站专栏文章页面结构，这些专有功能大多是通过`class样式 + 行内css样式`实现，并不具备可移植性，不符合**结构与样式分离**原则。
 
 **此工具并不对这些专有功能提供支持**。
 
-当然，如果你想为你的`Markdown`文章添加上B站专有功能，完全可以在使用此工具提交后，回到B站专栏**富文本编辑器**中手动修改。
+当然，如果你想为你的`Markdown`文章添加上B站专有功能，可以在使用此工具提交后，回到B站专栏**富文本编辑器**中手动修改。
 
 # Configurations（配置选项）
 
@@ -187,6 +187,7 @@ $ node src/cli.js -f <path/to/your/markdown/file>
   "cookies": ""
 }
 ```
+> 注：配置文件结构
 
 更加详细的说明：
 
@@ -198,6 +199,7 @@ cookies =>  以下 Cookie 必需，有效期大约半月（过期重取）
             "bili_jct"
             "SESSDATA"
 ```
+> 注：配置文件详情
 
 # Development（开发相关）
 
@@ -206,6 +208,7 @@ cookies =>  以下 Cookie 必需，有效期大约半月（过期重取）
 ```bash
 $ npm install bilibili-markdown-tool --save
 ```
+> 代码清单：`npm`安装模块
 
 | API  | 说明  |
 |:---- |:----- |
@@ -217,7 +220,7 @@ $ npm install bilibili-markdown-tool --save
 
 - [marked](https://github.com/markedjs/marked)
 
-> A markdown parser and compiler. Built for speed.
+> Notes: A markdown parser and compiler. Built for speed.
 
 ![marked][marked]
 
