@@ -7,10 +7,10 @@ version: 1.0.6-{build}
 # --------------------
 environment:
   matrix:
-    - nodejs_version: "6.15.1"
-    - nodejs_version: "8.14.1"
-    - nodejs_version: "10.14.2"
-    - nodejs_version: "11.5.0"
+    - nodejs_version: "6.16.0"
+    - nodejs_version: "8.15.0"
+    - nodejs_version: "10.15.0"
+    - nodejs_version: "11.6.0"
 # --------------------
 # Choose Windows platforms
 # --------------------
