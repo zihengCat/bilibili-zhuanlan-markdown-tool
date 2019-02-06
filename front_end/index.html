@@ -1,31 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bilibili专栏 Markdown 工具 - 前端窗口</title>
+    <title>Bilibili 专栏 Markdown 工具 - 前端窗口</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet"
+     href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<style>
-      body {
-          padding-top: 20px;
-          padding-bottom: 20px;
-      }
-/*
-        #md, #html{
-            height: 500px;
+        body {
+            padding-top: 20px;
+            padding-bottom: 20px;
         }
-        #md{
-            resize: none;
-        }
-        #html{
-            border: solid 1px darkgrey;
-            border-radius: 5px;
-        }
-*/
     </style>
 </head>
 <body>
 <div class="container">
-<!-- well -->
+<!-- Well -->
   <div class="well">
     <p class="lead">Bilibili专栏<code>Markdown</code>工具 - 使用说明</p>
     <ol>
@@ -34,11 +23,16 @@
         <li>点击<kbd>提交</kbd></li>
     </ol>
   </div>
-<!-- post form -->
+<!-- Post Form -->
   <div class="row col-md-12">
       <form method="POST">
         <h2>Markdown文件路径</h2>
-        <input type="text" class="form-control" placeholder="/path/to/your/markdown/file" name="md_file_path" required>
+        <input type="text"
+               class="form-control"
+               placeholder="/path/to/your/markdown/file"
+               name="md_file_path"
+               required
+        >
         <div class="checkbox">
           <label>
             <input type="checkbox" name="config_check" value="ok"> 我确定已填写好配置信息
@@ -47,16 +41,6 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
       </form>
   </div>
-<!-- markdown-editor -->
-<!--
-  <div class="row">
-    <div class="col-sm-6 col-lg-6 col-md-6">
-      <textarea name="md_str" id="md" class="form-control" placeholder="输入Markdown代码"></textarea>
-    </div>
-    <div id="html" class="col-lg-6 col-sm-6 col-md-6">
-    </div>
-  </div>
--->
 </div>
   <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js">
   </script>
@@ -64,12 +48,5 @@
   </script>
   <script src="https://cdn.bootcss.com/marked/0.3.19/marked.min.js">
   </script>
-<!--
-    <script>
-    $("#md").on("keyup blur", function () {
-        $('#html').html(marked($("#md").val()));
-    });
-    </script>
--->
 </body>
 </html>
