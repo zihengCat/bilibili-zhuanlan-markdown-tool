@@ -1,15 +1,20 @@
 #!/bin/bash
-# ----------------------------
-# Simple bash script for
+# ---------------------------
+# Simple Bash-Script for
 # detecting images file type.
-# ----------------------------
+# ---------------------------
 # Author: zihengCat
-# Requirements: bash, xxd
-# Platform: UNIX, Linux, macOS
-# ----------------------------
+# ---------------------------
+# Requirements: bash
+#               xxd
+# ---------------------------
+# Platform: UNIX
+#           Linux
+#           macOS
+# ---------------------------
 if [[ ${#} != 1 ]]
 then
-    echo "[ERROR]: command line parameter does not fit"
+    echo "[ERROR]: Command line parameter does not fit"
 else
     # ===================================
     # Read first 3 bytes or first 4 bytes

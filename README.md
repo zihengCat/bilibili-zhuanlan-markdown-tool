@@ -92,21 +92,21 @@ $ npm run server
 
 ### 命令行提交
 
-使用命令行（CLI）提交则更加简洁明了，还可以配合脚本实现批量提交。
+使用命令行（CLI）提交则更加简洁明了，还可以配合脚本实现批量化提交。
 
 ```bash
 # 绝对路径 or 相对路径均可
-$ node src/cli.js -f <path/to/your/markdown/file>
+$ npm run cli <path/to/your/markdown/file.md>
 ```
 > 代码清单：使用命令行（CLI）工具
 
 ### 发布前准备工作
 
-预览文章、添加头图、选择分类、撰写专栏推荐语，这些都是文章发布前的准备工作，手动完成后即可提请发布文章了，当然，B站要审核文章的。**目前，B站专栏还不支持修改发布后的专栏文章。**
+预览文章、添加头图、选择分类、撰写专栏推荐语，这些都是文章发布前的准备工作，手动完成后即可提请发布文章了，当然，B站要审核文章。**目前，B站专栏还不支持修改发布后的专栏文章。**
 
 ![step4_3][step4_3]
 
-> 图：由`Markdown`变身的专栏文章「网页端预览」
+> 图：`Markdown`转换专栏文章「网页端预览」
 
 # Attentions（注意事项）
 
@@ -205,12 +205,12 @@ cookies -> "sid"
 集成该工具开发，需要先`npm install`安装，再导入`bilibili-markdown-tool`模块。
 
 ```bash
-$ npm install bilibili-markdown-tool --save
+$ npm install bilibili-markdown-tool --save-dev
 ```
-> 代码清单：`npm`安装模块
+> 代码清单：`npm`安装开发模块
 
-| API  | 说明  |
-|:---- |:----- |
+| API                                          | 说明  |
+|:-------------------------------------------- | :---------------------------------------------------------------------------- |
 | `startProcess(markdown_path, config_object)` | 上传`Markdown`文件至B站专栏草稿箱，接受`Markdown`文件路径与用户自定义配置选项 |
 
 > 表：模块`API`接口表
