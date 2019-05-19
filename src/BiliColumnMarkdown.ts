@@ -214,7 +214,10 @@ class BiliColumnMarkdown {
                         console.log("[INFO]: MessageData -> " + chunk);
                     });
                     res.on("end", function(): void {
-                        console.log("[INFO]: " + "Successful!");
+                        console.log(
+                            "[INFO]: " + "Operations done successfully! -> " +
+                            new Date()
+                        );
                     });
                 });
             req.on("error", function(e: Error): void {

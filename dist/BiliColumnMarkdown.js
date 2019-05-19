@@ -115,7 +115,8 @@ var BiliColumnMarkdown = (function () {
                     console.log("[INFO]: MessageData -> " + chunk);
                 });
                 res.on("end", function () {
-                    console.log("[INFO]: " + "Successful!");
+                    console.log("[INFO]: " + "Operations done successfully! -> " +
+                        new Date());
                 });
             });
             req.on("error", function (e) {
