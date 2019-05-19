@@ -9,16 +9,16 @@ import * as fs from "fs";
 import * as path from "path";
 import * as querystring from "querystring";
 import * as BiliColumnModule from "./BiliColumnMarkdown"
-/* 创建 HTTP 服务器 */
+/* Create a tiny HTTP server */
 http.createServer(function(request, response) {
-    /* 读取前端 HTML 页面 */
+    /* Read front-end `index.html` page */
     let HTMLIndexPath: string = path.resolve(
         __dirname, "../front_end/index.html"
     );
     let HTMLIndexData: string = fs.readFileSync(
         HTMLIndexPath, "utf-8"
     );
-    /* 读取提交表单 */
+    /* Read user posted web form */
     let body: string = "";
     request.on("data", function(chunk: any): void {
         body += chunk;
@@ -29,28 +29,29 @@ http.createServer(function(request, response) {
             200,
             {'Content-Type': 'text/html; charset=utf-8'}
         );
-        /* 核对信息无误 */
+        /* Check key points */
         if (bodyObj["md_file_path"] &&
             bodyObj["config_check"] === "ok") {
-            /* 读取配置文件 */
+            /* Read user config file */
             let configFullPath = path.resolve(
                 __dirname,
+                // TODO: Change hardcode `config.json` position.
                 "../config/config.json"
             );
             let userConfig: string = fs.readFileSync(
                 configFullPath,
                 "utf-8"
             );
-            /* 尝试提交 */
+            /* Try uploading */
             try {
-                /* 调用接口上传处理 */
+                /* Call `BiliColumnMarkdown` uploads interface */
                 let b: BiliColumnModule.BiliColumnMarkdown =
                 new BiliColumnModule.BiliColumnMarkdown();
                 let userConfigObj: object = JSON.parse(userConfig);
                 let userCookies: string = userConfigObj["cookies"];
-                /* 启动处理流程 */
+                /* Start processing flow */
                 b.startProcess(bodyObj["md_file_path"], userConfigObj);
-                /* 返回成功页面 */
+                /* No exceptions -> feedback_success.html */
                 let HTMLSuccessfulPath: string = path.resolve(
                     __dirname,
                     "../front_end/feedback_success.html"
@@ -62,11 +63,11 @@ http.createServer(function(request, response) {
                     HTMLSuccessfulData
                 );
             }
-            /* 出错 */
+            /* Something error */
             catch(e) {
-                /* 打印出错信息*/
+                /* Print error messages to console */
                 console.error("[ERROR]: " + e);
-                /* 返回失败页面 */
+                /* Exceptions occurred -> feedback_fail.html */
                 let HTMLFailedPath = path.resolve(
                     __dirname,
                     "../front_end/feedback_fail.html"
@@ -79,15 +80,14 @@ http.createServer(function(request, response) {
                 );
             }
         }
-        /* 信息不足 */
+        /* Can not determined -> index.html */
         else {
-            /* 返回主页面 */
             response.write(
                 HTMLIndexData
             );
         }
         response.end();
     });
-}).listen(2233); /* 本地监听端口号 -> 2233 */
-/* 终端打印提示信息 */
+}).listen(2233); /* Listening port -> 2233 */
+/* Show infomations to console */
 console.log("[INFO]: Server running at http://127.0.0.1:2233/");
