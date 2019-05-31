@@ -1,1 +1,1 @@
-module.exports = require("./lib/BiliColumnMarkdown.js");
+module.exports = require("./dist/BiliColumnMarkdown.js");

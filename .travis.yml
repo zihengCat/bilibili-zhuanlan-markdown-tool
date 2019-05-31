@@ -7,12 +7,15 @@ node_js:
     - "12.2.0"
 # ---------------
 before_script:
+    - "node --version"
+    - "npm --version"
     - "npm install"
 # ---------------
 script:
     - "npm run test"
 # ---------------
 after_script:
+    - "echo 'date'"
 # ---------------
 #branches:
 #    only:
