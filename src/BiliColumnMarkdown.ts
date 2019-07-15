@@ -15,6 +15,7 @@ import * as querystring from "querystring";
 import marked from "marked";
 /**
  * Core Class
+ * @author zihengCat
  */
 class BiliColumnMarkdown {
     /**
@@ -616,3 +617,4 @@ class BiliColumnMarkdown {
     }
 }
 export { BiliColumnMarkdown };
+/* EOF */
