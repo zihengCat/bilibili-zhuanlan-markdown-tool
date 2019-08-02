@@ -35,7 +35,7 @@ if (cliArgsArray.length === 3 &&
 /* Do real works */
 } else if (cliArgsArray.length === 3 &&
           !cliArgsArray[2].startsWith("-")) {
-    console.log("[INFO]: Sending markdown files to bilibili server...");
+    console.log("[INFO]: Sending Markdown files to Bilibili server...");
     let uploadsMarkdownFile: (markdownFilePath: string) => void =
     function(markdownFilePath: string): void {
         /* Read user config file */
@@ -48,11 +48,11 @@ if (cliArgsArray.length === 3 &&
             userConfigFullPath, "utf-8"
         );
         /* Call `BiliColumnMarkdown` uploads interface */
-        let b: BiliColumnModule.BiliColumnMarkdown = 
+        let b: BiliColumnModule.BiliColumnMarkdown =
             new BiliColumnModule.BiliColumnMarkdown();
         b.startProcess(
             /* /a/path/to/markdown/file.md */
-            markdownFilePath, 
+            markdownFilePath,
             JSON.parse(userConfig)
         );
     };

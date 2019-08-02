@@ -36,7 +36,7 @@ if (cliArgsArray.length === 3 &&
 }
 else if (cliArgsArray.length === 3 &&
     !cliArgsArray[2].startsWith("-")) {
-    console.log("[INFO]: Sending markdown files to bilibili server...");
+    console.log("[INFO]: Sending Markdown files to Bilibili server...");
     var uploadsMarkdownFile = function (markdownFilePath) {
         var userConfigFullPath = path.resolve(__dirname, "../config/config.json");
         var userConfig = fs.readFileSync(userConfigFullPath, "utf-8");
