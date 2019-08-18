@@ -41,7 +41,7 @@ if (cliArgsArray.length === 3 &&
         /* Read user config file */
         let userConfigFullPath: string = path.resolve(
             __dirname,
-            // TODO: Change hardcode `config.json` position.
+            // TODO: Change hardcode `config.json` path position.
             "../config/config.json"
         );
         let userConfig = fs.readFileSync(
