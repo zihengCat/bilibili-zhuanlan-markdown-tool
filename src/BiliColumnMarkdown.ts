@@ -93,7 +93,7 @@ class BiliColumnMarkdown {
     }
     /**
      * 功能函数: 检查用户是否配置了自定义参数
-     * @param key 
+     * @param key
      * @returns `boolean`
      */
     private checkUserPreferences(key: string): boolean {
@@ -171,7 +171,7 @@ class BiliColumnMarkdown {
     /**
      * 核心函数: 提交表单数据
      * @param form
-     * @param flag 
+     * @param flag
      */
     private postRequest(form: any, flag: string): void {
         let postOptions: object = {
@@ -204,7 +204,7 @@ class BiliColumnMarkdown {
             postOptions["host"] = "api.bilibili.com";
             postOptions["path"] = "/x/article/creative/draft/addupdate";
             /* 发送 HTML 表单 */
-            let req: http.ClientRequest = 
+            let req: http.ClientRequest =
             http.request(
                 postOptions,
                 function(res: http.IncomingMessage): void {
@@ -249,11 +249,11 @@ class BiliColumnMarkdown {
                  * ]
                  */
                 let ret: any[] = [];
-                /** 
+                /**
                  * cover -> Image Base64
                  */
                 let imageId = form["cover"].slice(-50, -30);
-                let req: http.ClientRequest = 
+                let req: http.ClientRequest =
                 http.request(
                     postOptions,
                     function(res: http.IncomingMessage): void {
@@ -369,7 +369,7 @@ class BiliColumnMarkdown {
         /* 覆写`分隔线`生成规则 */
         myRenderer.hr = function(): string {
             /* hardcode here */
-            let biliCutOff: string = 
+            let biliCutOff: string =
             "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png";
             return '<figure class="img-box">' +
             '<img src="${cutoff}" class="cut-off-1" />'.replace("${cutoff}", biliCutOff) +
@@ -454,7 +454,7 @@ class BiliColumnMarkdown {
     }
     /**
      * 功能函数: 检测 HTML 文档中是否包含本地图片
-     * @param HTMLText 
+     * @param HTMLText
      */
     private hasLocalImages(HTMLText: string): boolean {
         let hasImage: RegExpMatchArray | null = HTMLText.match(/src=.* \/>/g);
@@ -515,8 +515,8 @@ class BiliColumnMarkdown {
     }
     /**
      * 生成图片发送表单
-     * @param imageURL 
-     * @param csrf 
+     * @param imageURL
+     * @param csrf
      * @returns Image Form Object
      */
     private imagesFormGenerate(
@@ -526,8 +526,8 @@ class BiliColumnMarkdown {
         /* 功能函数: 图片转 Base64 编码 */
         function imageToBase64(imageSource: string): string {
         /* ------------------------------- *
-         *        图片 Base64 格式头         *
-         * =============================== *
+         *        图片 Base64 格式头       *
+         * ------------------------------- *
          * PNG  -> data:image/png;base64,  *
          * JPEG -> data:image/jpeg;base64, *
          * GIF  -> data:image/gif;base64,  *

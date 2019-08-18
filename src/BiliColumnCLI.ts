@@ -62,3 +62,4 @@ if (cliArgsArray.length === 3 &&
     console.error("[ERROR]: CLI arguments do not fit...");
     console.error("\t See `--help` pages.");
 }
+/* EOF */

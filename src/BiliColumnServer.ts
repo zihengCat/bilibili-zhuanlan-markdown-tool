@@ -88,6 +88,7 @@ http.createServer(function(request, response) {
         }
         response.end();
     });
-}).listen(2233); /* Listening port -> 2233 */
-/* Show infomations to console */
+}).listen(2233); /* Listening Port -> 2233 */
+/* Show infomations to Console */
 console.log("[INFO]: Server running at http://127.0.0.1:2233/");
+/* EOF */
