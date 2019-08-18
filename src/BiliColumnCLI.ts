@@ -45,14 +45,16 @@ if (cliArgsArray.length === 3 &&
             "../config/config.json"
         );
         let userConfig = fs.readFileSync(
+            /* `config.json` should be UTF-8 encoding. */
             userConfigFullPath, "utf-8"
         );
         /* Call `BiliColumnMarkdown` uploads interface */
         let b: BiliColumnModule.BiliColumnMarkdown =
             new BiliColumnModule.BiliColumnMarkdown();
         b.startProcess(
-            /* /a/path/to/markdown/file.md */
+            /* markdownPath -> /a/path/to/markdown/file.md */
             markdownFilePath,
+            /* userConfig -> JSONObject */
             JSON.parse(userConfig)
         );
     };

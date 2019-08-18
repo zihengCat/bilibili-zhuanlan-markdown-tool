@@ -213,11 +213,11 @@ $ npm install bilibili-markdown-tool --save-dev
 ```
 > 代码清单：`npm`安装开发模块
 
-| API                                          | 说明                                                                            |
-|:-------------------------------------------- | :------------------------------------------------------------------------------ |
-| `startProcess(markdown_path, config_object)` | 上传`Markdown`文件至B站专栏草稿箱，接受`Markdown`文件路径与用户自定义配置选项。 |
+| APIs | 说明 |
+|:---- | :--- |
+| `startProcess(markdownPath: string, userConfig: object): void` | 上传`Markdown`文件至B站专栏草稿箱，接受`Markdown`文件路径与用户自定义配置选项。 |
 
-> 表：模块`API`接口表
+> 表：模块`APIs`接口表
 
 # Dependences（依赖相关）
 
