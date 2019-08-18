@@ -1,1 +1,1 @@
-module.exports = require('./lib/bili_zhuanlan_markdown.js');
+module.exports = require("./dist/BiliColumnMarkdown.js");

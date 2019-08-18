@@ -1,5 +1,6 @@
 # Project
 #config/config.json
+config/config_me.json
 package-lock.json
 
 # macOS
