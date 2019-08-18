@@ -44,14 +44,14 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 
 ## Step 2 - 获取关键参数写配置文件
 
-这是至关重要的一步，我们需要**手动**取得认证`cookies`并写入配置文件。`cookies`保存了**「用户个人身份认证信息」**，工具依赖认证参数与B站服务器正常通信。
+这是至关重要的一步，我们需要**手动**取得认证`cookies`并写入配置文件。`cookies`保存了「用户个人身份认证信息」，工具依赖认证参数与B站服务器正常通信。
 
-可以使用**「Chrome开发者工具」**获取`cookies`，具体步骤如下：
+可以使用「Chrome 开发者工具」获取`cookies`，具体步骤如下：
 
-1. 前往[B站AJAX快速登录页](https://passport.bilibili.com/ajax/miniLogin/minilogin)
+1. 前往[「B站AJAX快速登录页」](https://passport.bilibili.com/ajax/miniLogin/minilogin)
 2. 打开*Chrome开发者工具 >> 网络侦测器*
-3. 填写B站登录信息与验证码
-4. 从跨域跳转响应页中取得`cookie`参数
+3. 填写B站「登录信息」与「验证码」
+4. 从「跨域跳转响应页」中取得`cookie`参数
 
 ![step2][step2]
 
