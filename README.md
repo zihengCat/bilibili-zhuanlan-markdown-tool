@@ -240,3 +240,4 @@ $ npm install bilibili-markdown-tool --save-dev
 [step4_3]:   ./docs/step4_3.png
 [marked]:    ./docs/marked.png
 
+<!-- EOF -->
