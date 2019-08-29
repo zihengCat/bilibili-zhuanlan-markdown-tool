@@ -4,14 +4,14 @@
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
-/* Standard Libs */
+/* Standard Libraries */
 import * as fs from "fs";
 import * as path from "path";
 import * as url from "url";
 import * as http from "http";
 import * as https from "https";
 import * as querystring from "querystring";
-/* Third-Part Libs */
+/* Third-Part Libraries */
 import marked from "marked";
 /**
  * Core Class
@@ -37,8 +37,7 @@ class BiliColumnMarkdown {
     /**
      * 用户偏好设置选项
      */
-    private userPreferences: object = {
-    };
+    private userPreferences: object = {};
     /**
      * 本地图片地址暂存区（Array of Tuple）
      * ```
@@ -49,9 +48,9 @@ class BiliColumnMarkdown {
      *     [ imageId_n, localImageURL_n ]
      * ]
      * ```
+     * > 注：暂存区数据结构
      */
-    private localImageURLs: Array<[string, string]> = [
-    ];
+    private localImageURLs: Array<[string, string]> = [];
     /**
      * B站上传图片地址暂存区（Array of Tuple）
      * ```
@@ -62,9 +61,9 @@ class BiliColumnMarkdown {
      *     [ imageId_n, biliImageURL_n ]
      * ]
      * ```
+     * > 注：暂存区数据结构
      */
-    private biliImageURLs: Array<[string, string]> = [
-    ];
+    private biliImageURLs: Array<[string, string]> = [];
     /**
      * 专栏表单数据结构
      */
@@ -82,7 +81,7 @@ class BiliColumnMarkdown {
         "image_urls": "",
         "origin_image_urls": "",
         "dynamic_intro": "", /* 文章推荐语（可为空） */
-        // "aid": "",      /* 可有可无 => 有: 修改草稿, 无: 新增草稿 */
+        // "aid": "",      /* 可有可无 -> 有: 修改草稿, 无: 新增草稿 */
         "csrf": ""         /* 跨域认证信息（自动生成） */
     }
     /**
@@ -265,18 +264,20 @@ class BiliColumnMarkdown {
                             ret.push(chunk);
                         });
                         res.on("end", function(): void {
-                        /*
-                        {
-                            "code": 0,
-                            "message": "0",
-                            "ttl": 1,
-                            "data": {
-                                "size": 123456,
-                                "url":"http://i0.hdslb.com/bfs/article/xxx"
-                            }
-                        }
-                        */
-                            let retMessage: object = JSON.parse(ret.toString());
+                        /**
+                         * {
+                         *     "code": 0,
+                         *     "message": "0",
+                         *     "ttl": 1,
+                         *     "data": {
+                         *         "size": 123456,
+                         *         "url":"http://i0.hdslb.com/bfs/article/xxx"
+                         *     }
+                         * }
+                         */
+                            let retMessage: object = JSON.parse(
+                                    ret.toString()
+                            );
                             if (retMessage["code"] == 0) {
                                 /* 返回格式化字符串 */
                                 resolve({
@@ -368,7 +369,7 @@ class BiliColumnMarkdown {
         }
         /* 覆写`分隔线`生成规则 */
         myRenderer.hr = function(): string {
-            /* hardcode here */
+            /* HardCode here... */
             let biliCutOff: string =
             "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png";
             return '<figure class="img-box">' +
