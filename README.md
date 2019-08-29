@@ -53,11 +53,15 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 3. 填写B站「登录信息」与「验证码」
 4. 从「跨域跳转响应页」中取得`cookie`参数
 
-![step2][step2]
+![step2_1][step2_1]
 
 > 图：获取`cookies`参数
 
-将取得的`cookies`认证参数写入`config/config.json`配置文件中，具体格式参看**配置选项**。
+将取得的`cookies`认证参数写入`config/config.json`配置文件中，如图所示（具体格式参看**配置选项**）。
+
+![step2_2][step2_2]
+
+> 图：写入`cookies`参数
 
 > B 站 AJAX 快速登录页：https://passport.bilibili.com/ajax/miniLogin/minilogin
 
@@ -233,7 +237,8 @@ $ npm install bilibili-markdown-tool --save-dev
 
 [bilixmd]:   ./docs/bilixmd.png
 [work_flow]: ./docs/work_flow.png
-[step2]:     ./docs/step2.png
+[step2_1]:   ./docs/step2_1.png
+[step2_2]:   ./docs/step2_2.png
 [step3]:     ./docs/step3.png
 [step4_1]:   ./docs/step4_1.png
 [step4_2]:   ./docs/step4_2.png
