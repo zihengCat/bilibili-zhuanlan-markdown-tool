@@ -4,17 +4,18 @@
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
-/* Standard Libs */
+/* Standard Libraries */
 import * as fs from "fs";
 import * as path from "path";
 import * as url from "url";
 import * as http from "http";
 import * as https from "https";
 import * as querystring from "querystring";
-/* Third-Part Libs */
+/* Third-Part Libraries */
 import marked from "marked";
 /**
  * Core Class
+ * @author zihengCat
  */
 class BiliColumnMarkdown {
     /**
@@ -36,8 +37,7 @@ class BiliColumnMarkdown {
     /**
      * 用户偏好设置选项
      */
-    private userPreferences: object = {
-    };
+    private userPreferences: object = {};
     /**
      * 本地图片地址暂存区（Array of Tuple）
      * ```
@@ -48,9 +48,9 @@ class BiliColumnMarkdown {
      *     [ imageId_n, localImageURL_n ]
      * ]
      * ```
+     * > 注：暂存区数据结构
      */
-    private localImageURLs: Array<[string, string]> = [
-    ];
+    private localImageURLs: Array<[string, string]> = [];
     /**
      * B站上传图片地址暂存区（Array of Tuple）
      * ```
@@ -61,9 +61,9 @@ class BiliColumnMarkdown {
      *     [ imageId_n, biliImageURL_n ]
      * ]
      * ```
+     * > 注：暂存区数据结构
      */
-    private biliImageURLs: Array<[string, string]> = [
-    ];
+    private biliImageURLs: Array<[string, string]> = [];
     /**
      * 专栏表单数据结构
      */
@@ -81,7 +81,7 @@ class BiliColumnMarkdown {
         "image_urls": "",
         "origin_image_urls": "",
         "dynamic_intro": "", /* 文章推荐语（可为空） */
-        // "aid": "",      /* 可有可无 => 有: 修改草稿, 无: 新增草稿 */
+        // "aid": "",      /* 可有可无 -> 有: 修改草稿, 无: 新增草稿 */
         "csrf": ""         /* 跨域认证信息（自动生成） */
     }
     /**
@@ -92,7 +92,7 @@ class BiliColumnMarkdown {
     }
     /**
      * 功能函数: 检查用户是否配置了自定义参数
-     * @param key 
+     * @param key
      * @returns `boolean`
      */
     private checkUserPreferences(key: string): boolean {
@@ -170,7 +170,7 @@ class BiliColumnMarkdown {
     /**
      * 核心函数: 提交表单数据
      * @param form
-     * @param flag 
+     * @param flag
      */
     private postRequest(form: any, flag: string): void {
         let postOptions: object = {
@@ -203,7 +203,7 @@ class BiliColumnMarkdown {
             postOptions["host"] = "api.bilibili.com";
             postOptions["path"] = "/x/article/creative/draft/addupdate";
             /* 发送 HTML 表单 */
-            let req: http.ClientRequest = 
+            let req: http.ClientRequest =
             http.request(
                 postOptions,
                 function(res: http.IncomingMessage): void {
@@ -248,11 +248,11 @@ class BiliColumnMarkdown {
                  * ]
                  */
                 let ret: any[] = [];
-                /** 
+                /**
                  * cover -> Image Base64
                  */
                 let imageId = form["cover"].slice(-50, -30);
-                let req: http.ClientRequest = 
+                let req: http.ClientRequest =
                 http.request(
                     postOptions,
                     function(res: http.IncomingMessage): void {
@@ -264,18 +264,20 @@ class BiliColumnMarkdown {
                             ret.push(chunk);
                         });
                         res.on("end", function(): void {
-                        /*
-                        {
-                            "code": 0,
-                            "message": "0",
-                            "ttl": 1,
-                            "data": {
-                                "size": 123456,
-                                "url":"http://i0.hdslb.com/bfs/article/xxx"
-                            }
-                        }
-                        */
-                            let retMessage: object = JSON.parse(ret.toString());
+                        /**
+                         * {
+                         *     "code": 0,
+                         *     "message": "0",
+                         *     "ttl": 1,
+                         *     "data": {
+                         *         "size": 123456,
+                         *         "url":"http://i0.hdslb.com/bfs/article/xxx"
+                         *     }
+                         * }
+                         */
+                            let retMessage: object = JSON.parse(
+                                    ret.toString()
+                            );
                             if (retMessage["code"] == 0) {
                                 /* 返回格式化字符串 */
                                 resolve({
@@ -367,8 +369,8 @@ class BiliColumnMarkdown {
         }
         /* 覆写`分隔线`生成规则 */
         myRenderer.hr = function(): string {
-            /* hardcode here */
-            let biliCutOff: string = 
+            /* HardCode here... */
+            let biliCutOff: string =
             "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png";
             return '<figure class="img-box">' +
             '<img src="${cutoff}" class="cut-off-1" />'.replace("${cutoff}", biliCutOff) +
@@ -453,7 +455,7 @@ class BiliColumnMarkdown {
     }
     /**
      * 功能函数: 检测 HTML 文档中是否包含本地图片
-     * @param HTMLText 
+     * @param HTMLText
      */
     private hasLocalImages(HTMLText: string): boolean {
         let hasImage: RegExpMatchArray | null = HTMLText.match(/src=.* \/>/g);
@@ -514,8 +516,8 @@ class BiliColumnMarkdown {
     }
     /**
      * 生成图片发送表单
-     * @param imageURL 
-     * @param csrf 
+     * @param imageURL
+     * @param csrf
      * @returns Image Form Object
      */
     private imagesFormGenerate(
@@ -525,8 +527,8 @@ class BiliColumnMarkdown {
         /* 功能函数: 图片转 Base64 编码 */
         function imageToBase64(imageSource: string): string {
         /* ------------------------------- *
-         *        图片 Base64 格式头         *
-         * =============================== *
+         *        图片 Base64 格式头       *
+         * ------------------------------- *
          * PNG  -> data:image/png;base64,  *
          * JPEG -> data:image/jpeg;base64, *
          * GIF  -> data:image/gif;base64,  *
@@ -616,3 +618,4 @@ class BiliColumnMarkdown {
     }
 }
 export { BiliColumnMarkdown };
+/* EOF */

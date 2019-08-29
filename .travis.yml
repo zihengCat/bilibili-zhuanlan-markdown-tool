@@ -1,19 +1,25 @@
+# ---------------
 language: node_js
 # ---------------
 node_js:
     - "6.17.1"
-    - "8.16.0"
-    - "10.15.3"
-    - "12.2.0"
+    - "8.16.1"
+    - "10.16.3"
+    - "12.8.1"
 # ---------------
 before_script:
+    - "node --version"
+    - "npm --version"
     - "npm install"
 # ---------------
 script:
     - "npm run test"
 # ---------------
 after_script:
+    - "echo $(date)"
 # ---------------
 #branches:
 #    only:
 #        - "master"
+# ---------------
+# EOF
