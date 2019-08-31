@@ -6,7 +6,7 @@
 
 ![bilixmd][bilixmd]
 
-一款可以让你使用`Markdown`文本标记语言撰写**哔哩哔哩（bilibili.com）专栏文章**的辅助工具。
+一款使用`Markdown`撰写**哔哩哔哩（bilibili.com）专栏文章**的辅助工具。
 
 # Usage（使用说明）
 
