@@ -104,8 +104,8 @@ class BiliColumnMarkdown {
     }
     /**
      * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
-     *         上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
-     *         合成表单发送更新
+     *           上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
+     *           合成表单发送更新
      * @param markdownPath
      * @param userConfig
      * @returns void
@@ -120,6 +120,8 @@ class BiliColumnMarkdown {
         /* 计算 CSRF 值 */
         this.userPreferences["csrf"] =
             this.csrfGenerate(userConfig["cookies"]);
+        /* 获取用户自定义 UA */
+        //...
         /* 转换 Markdown 文档为 HTML 文档 */
         this.HTMLText = this.markdownToHTML(this.markdownText);
         if (this.hasLocalImages(this.HTMLText)) {
@@ -325,8 +327,9 @@ class BiliColumnMarkdown {
     private markdownToHTML(markdownText: string): string {
         /* 自定义生成器 */
         let myRenderer: marked.Renderer = new marked.Renderer();
-        /* 覆写`标题`生成规则「弃用」=>
-          `marked v0.4.0` 已支持`headerIds`选项
+        /**
+         * 覆写`标题`生成规则「弃用」->
+         * `marked v0.4.0`已支持`headerIds`选项
          */
         /*
         myRenderer.heading = function (text, level) {
@@ -610,12 +613,13 @@ class BiliColumnMarkdown {
                 );
             }
             /* 一次性全部提交 */
-            this.postRequest(this.HTMLFormGenerate() ,"html");
+            this.postRequest(this.HTMLFormGenerate(), "html");
         } else {
             /* 本地图片未全部上传完成 */
             //console.log("Do nothing");
         }
     }
 }
+/* 导出模块 */
 export { BiliColumnMarkdown };
 /* EOF */
