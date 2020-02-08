@@ -8,8 +8,8 @@ version: 1.0.8-{build}
 environment:
   matrix:
     - nodejs_version: "6.17.1"
-    - nodejs_version: "8.16.1"
-    - nodejs_version: "10.16.3"
+    - nodejs_version: "8.17.0"
+    - nodejs_version: "10.19.0"
     - nodejs_version: "12.15.0"
     - nodejs_version: "13.8.0"
 # -------------------------
