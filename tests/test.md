@@ -20,7 +20,7 @@
 
 测试图片功能。
 
-![Bilibili Logo](./bili_logo.png)
+![Bilibili Logo][Bilibili_Logo]
 
 # 列表
 
@@ -46,6 +46,8 @@
 
 这是行内代码`code`。
 
+**注意：代码块中的`<>`尖括号内容会被 B 站服务端过滤屏蔽掉，WTF!**
+
 ```plain
 Hello, you.
 ```
@@ -55,18 +57,27 @@ Hello, you.
 #include <stdio.h>
 int main(void) {
     printf("Hello, world!");
+    printf("<...>");
     return 0;
 }
 ```
 > 代码清单：`C/C++`代码
 
 ```java
-import java.lang.*;
+import java.util.List;
+import java.util.LinkedList;
+/**
+ * A simple Java class
+ *
+ * @author zihengCat
+ */
 public class Hello {
     public static void main(String[] args) {
+       List<String> list = new LinkedList<>();
        System.out.println("Hello, world!");
     }
 }
+/* EOF */
 ```
 > 代码清单：`Java`代码
 
@@ -74,4 +85,19 @@ public class Hello {
 print("Hello, world!")
 ```
 > 代码清单：`Python`代码
+
+```js
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+```
+> 代码清单：`JavaScript`代码
+
+
+[Bilibili_Logo]: ./bili_logo.png
 
