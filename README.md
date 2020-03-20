@@ -42,9 +42,17 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 
 获取 GitHub 项目工程源码，可以使用`git clone`，也可以直接下载`zip`压缩包。
 
-对于`Node.js`项目，我们一般使用`npm install`安装项目依赖。
+对于`Node.js`项目，我们一般使用`npm install`安装项目依赖。如果国内网络不畅，可以指定使用淘宝 NPM 镜像。
 
 ```bash
+npm --registry 'https://registry.npm.taobao.org/' install ...
+```
+> 代码清单：单次`npm`命令加入镜像
+
+```bash
+# 检测本机运行环境
+$ node --version && npm --version
+
 # 获取源代码包
 $ git clone 'https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool.git'
 
