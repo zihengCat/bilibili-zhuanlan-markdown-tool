@@ -47,7 +47,7 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 ```bash
 npm --registry 'https://registry.npm.taobao.org/' install ...
 ```
-> 代码清单：单次`npm`命令加入镜像
+> 代码清单：单次 NPM 命令使用镜像
 
 ```bash
 # 检测本机运行环境
