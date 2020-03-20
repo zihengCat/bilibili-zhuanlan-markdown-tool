@@ -21,7 +21,7 @@ var BiliColumnMarkdown = (function () {
         this.markdownText = "";
         this.HTMLText = "";
         this.cookiesText = "";
-        this.userPreferences = {};
+        this.userPreferences = new Map();
         this.localImageURLs = [];
         this.biliImageURLs = [];
         this.formTemplate = {
@@ -42,7 +42,7 @@ var BiliColumnMarkdown = (function () {
         };
     }
     BiliColumnMarkdown.prototype.checkUserPreferences = function (key) {
-        if (this.userPreferences[key] !== undefined) {
+        if (this.userPreferences.get(key) !== undefined) {
             return true;
         }
         else {
@@ -50,11 +50,13 @@ var BiliColumnMarkdown = (function () {
         }
     };
     BiliColumnMarkdown.prototype.startProcess = function (markdownPath, userConfig) {
+        markdownPath = markdownPath.trim();
         this.markdownPath = path.resolve(markdownPath);
         this.markdownText = fs.readFileSync(markdownPath, "utf-8");
-        this.userPreferences = userConfig;
-        this.userPreferences["csrf"] =
-            this.csrfGenerate(userConfig["cookies"]);
+        var userConfigMap = this.objToMap(userConfig);
+        this.userPreferences = userConfigMap;
+        var csrf = userConfigMap.get("cookies");
+        this.userPreferences.set("csrf", this.csrfGenerate(csrf));
         this.HTMLText = this.markdownToHTML(this.markdownText);
         if (this.hasLocalImages(this.HTMLText)) {
             this.postWithImagesForm();
@@ -62,6 +64,16 @@ var BiliColumnMarkdown = (function () {
         else {
             this.postPureHTMLForm();
         }
+    };
+    BiliColumnMarkdown.prototype.objToMap = function (obj) {
+        var map = new Map();
+        if (obj === undefined) {
+            return map;
+        }
+        for (var key in obj) {
+            map.set(key, obj[key]);
+        }
+        return map;
     };
     BiliColumnMarkdown.prototype.postPureHTMLForm = function () {
         this.postRequest(this.HTMLFormGenerate(), "html");
@@ -74,15 +86,15 @@ var BiliColumnMarkdown = (function () {
         for (var key in this.formTemplate) {
             formData[key] = this.formTemplate[key];
         }
-        if (this.checkUserPreferences("title") == true) {
-            formData["title"] = this.userPreferences["title"];
+        if (this.checkUserPreferences("title") === true) {
+            formData["title"] = this.userPreferences.get("title");
         }
         else {
             var titleName = path.basename(this.markdownPath);
             titleName = titleName.slice(0, titleName.lastIndexOf("."));
             formData["title"] = titleName;
         }
-        formData["csrf"] = this.userPreferences["csrf"];
+        formData["csrf"] = this.userPreferences.get("csrf");
         formData["content"] = this.HTMLText;
         formData["words"] = this.wordsCount(this.HTMLText);
         formData["summary"] = this.summaryGenerate(this.HTMLText);
@@ -102,10 +114,10 @@ var BiliColumnMarkdown = (function () {
                 'Origin': 'https://member.bilibili.com',
                 'Referer': 'https://member.bilibili.com/article-text/home',
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
-                'Cookie': this.userPreferences["cookies"]
+                'Cookie': this.userPreferences.get("cookies")
             }
         };
-        if (flag == "html") {
+        if (flag === "html") {
             postOptions["host"] = "api.bilibili.com";
             postOptions["path"] = "/x/article/creative/draft/addupdate";
             var req = http.request(postOptions, function (res) {
@@ -286,7 +298,7 @@ var BiliColumnMarkdown = (function () {
         }
     };
     BiliColumnMarkdown.prototype.imagesFormGenerate = function (imageURL, csrf) {
-        if (csrf === void 0) { csrf = this.userPreferences["csrf"]; }
+        if (csrf === void 0) { csrf = this.userPreferences.get("csrf"); }
         function imageToBase64(imageSource) {
             if (imageSource.indexOf('http') != 0) {
                 var imagePrefix = "";

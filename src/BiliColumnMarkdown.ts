@@ -4,24 +4,33 @@
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
-/* Standard Libraries */
+
+/**
+ * Standard Libraries
+ */
 import * as fs from "fs";
 import * as path from "path";
 import * as url from "url";
 import * as http from "http";
 import * as https from "https";
 import * as querystring from "querystring";
-/* Third-Part Libraries */
-import marked from "marked";
+
 /**
- * Core Class
+ * Third-Part Libraries
+ */
+import marked from "marked";
+
+/**
+ * Bilibili Column Markdown Core Class
+ *
+ * @since 2020-03-21
  * @author zihengCat
  */
 class BiliColumnMarkdown {
     /**
      * 本地 Markdown 路径
      */
-    private markdownPath: string =  "";
+    private markdownPath: string = "";
     /**
      * 原始 Markdown 文本
      */
@@ -37,7 +46,7 @@ class BiliColumnMarkdown {
     /**
      * 用户偏好设置选项
      */
-    private userPreferences: object = {};
+    private userPreferences: Map<string, string> = new Map<string, string>();
     /**
      * 本地图片地址暂存区（Array of Tuple）
      * ```
@@ -67,7 +76,7 @@ class BiliColumnMarkdown {
     /**
      * 专栏表单数据结构
      */
-    private formTemplate: object = {
+    private formTemplate: any | object = {
         "title": "",       /* 文章标题（自动生成） */
         "banner_url": "",  /* 文章头图（可为空） */
         "content": "",     /* 文章 HTML 内容（自动生成） */
@@ -85,48 +94,85 @@ class BiliColumnMarkdown {
         "csrf": ""         /* 跨域认证信息（自动生成） */
     }
     /**
-     * 构造函数
+     * 默认无参构造函数
+     *
+     * @param void
      */
     public constructor() {
         // ...
     }
     /**
      * 功能函数: 检查用户是否配置了自定义参数
+     *
      * @param key
      * @returns `boolean`
      */
     private checkUserPreferences(key: string): boolean {
-        if (this.userPreferences[key] !== undefined) {
+        if (this.userPreferences.get(key) !== undefined) {
             return true;
         } else {
             return false;
         }
     }
     /**
-     * 处理流程: 取得 MD 文档与配置选项 -> Markdown 转换 HTML ->
-     *         上传本地图片取得B站外链 -> 替换本地图片地址为B站外链地址 ->
-     *         合成表单发送更新
+     * 执行流程：
+     *     -> 取得 Markdown 文档与用户配置选项
+     *     -> Markdown 转换 HTML
+     *     -> 上传本地图片取得B站外链
+     *     -> 替换本地图片地址为B站外链地址
+     *     -> 合成提交表单发送更新
+     *
      * @param markdownPath
      * @param userConfig
      * @returns void
      */
     public startProcess(markdownPath: string, userConfig: object): void {
-        /* 解析 Markdown 文档 <绝对路径> */
+
+        /* Bug-Fix: Path should be trimmed */
+        markdownPath = markdownPath.trim();
+
+        /* 解析 Markdown 文档 -> 绝对路径 */
         this.markdownPath = path.resolve(markdownPath);
-        /* 读取 Markdown 文本内容 */
+
+        /* 读取 Markdown 文本内容 -> UTF-8 */
         this.markdownText = fs.readFileSync(markdownPath, "utf-8");
-        /* 读取用户配置信息 */
-        this.userPreferences = userConfig;
+
+        /* 读取用户配置信息 -> Map<String, String> */
+        let userConfigMap = this.objToMap(userConfig);
+        this.userPreferences = userConfigMap;
+
         /* 计算 CSRF 值 */
-        this.userPreferences["csrf"] =
-            this.csrfGenerate(userConfig["cookies"]);
+        let csrf: string = <string> userConfigMap.get("cookies");
+        this.userPreferences.set("csrf", this.csrfGenerate(csrf));
+
+        /* TODO: 获取用户自定义 UA */
+        // ...
+
         /* 转换 Markdown 文档为 HTML 文档 */
         this.HTMLText = this.markdownToHTML(this.markdownText);
+
+        /* 带图片/无图片提交 */
         if (this.hasLocalImages(this.HTMLText)) {
             this.postWithImagesForm();
         } else {
             this.postPureHTMLForm();
         }
+    }
+    /**
+     * Object 转换 Map
+     *
+     * @param obj
+     * @returns `Map<string, string>`
+     */
+    private objToMap(obj: any): Map<string, string> {
+        let map = new Map<string, string>();
+        if (obj === undefined) {
+            return map;
+        }
+        for (let key in obj) {
+            map.set(key, obj[key]);
+        }
+        return map;
     }
     /* 提交 HTML 表单 */
     private postPureHTMLForm(): void {
@@ -140,16 +186,17 @@ class BiliColumnMarkdown {
     }
     /* 使用转换后数据生成 HTML 发送表单 */
     private HTMLFormGenerate(): object {
-        let formData: object = {
+        let formData: any | object = {
+            // ...
         };
         /* 深拷贝模版数据 */
         for (let key in this.formTemplate) {
             formData[key] = this.formTemplate[key];
         }
         /* 用户自定义配置 */
-        if (this.checkUserPreferences("title") == true) {
+        if (this.checkUserPreferences("title") === true) {
             /* 使用用户自定义标题 */
-            formData["title"] = this.userPreferences["title"];
+            formData["title"] = this.userPreferences.get("title");
         } else {
             /* 使用默认标题 */
             let titleName: string = path.basename(this.markdownPath);
@@ -159,7 +206,7 @@ class BiliColumnMarkdown {
             formData["title"] = titleName;
         }
         /* 覆写 CSRF 值 */
-        formData["csrf"]  = this.userPreferences["csrf"];
+        formData["csrf"]  = this.userPreferences.get("csrf");
         /* 覆写相关信息 */
         formData["content"] = this.HTMLText;
         formData["words"]   = this.wordsCount(this.HTMLText);
@@ -173,7 +220,7 @@ class BiliColumnMarkdown {
      * @param flag
      */
     private postRequest(form: any, flag: string): void {
-        let postOptions: object = {
+        let postOptions: any | object = {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -194,11 +241,11 @@ class BiliColumnMarkdown {
                 /* 默认 UA */
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
                 /* 构建 Cookie */
-                'Cookie': this.userPreferences["cookies"]
+                'Cookie': this.userPreferences.get("cookies")
             }
         };
-        if (flag == "html") {
-            //console.log(form);
+        if (flag === "html") {
+            // console.log(form);
             /* 添加提交地址 */
             postOptions["host"] = "api.bilibili.com";
             postOptions["path"] = "/x/article/creative/draft/addupdate";
@@ -275,8 +322,8 @@ class BiliColumnMarkdown {
                          *     }
                          * }
                          */
-                            let retMessage: object = JSON.parse(
-                                    ret.toString()
+                            let retMessage: any | object = JSON.parse(
+                                ret.toString()
                             );
                             if (retMessage["code"] == 0) {
                                 /* 返回格式化字符串 */
@@ -300,19 +347,19 @@ class BiliColumnMarkdown {
                 );
                 req.end();
             }).then(
-            function(result) {
-                //console.log("[Resolve]: " + result);
+            function(result: any) {
+                // console.log("[Resolve]: " + result);
                 let biliObject: BiliColumnMarkdown = result["biliObject"];
-                let imageId: string =  result["imageId"];
-                let retMessage: object = result["retMessage"];
+                let imageId: string = result["imageId"];
+                let retMessage: any | object = result["retMessage"];
                 let biliImageURL: string = retMessage["data"]["url"];
-                //console.log(retMessage);
+                // console.log(retMessage);
                 biliObject.pushToBiliImageURLs(
                     [imageId, biliImageURL]
                 );
                 biliObject.replaceLocalImageURLs();
             },
-            function(reject) {
+            function(reject: any) {
                 console.error("[Reject]: " + reject);
             });
         } else {
@@ -321,12 +368,16 @@ class BiliColumnMarkdown {
     }
     /**
      * 核心函数: `Markdown` 转 `Bilibili Compatible HTML`。
+     *
+     * @param markdownText
+     * @returns string
      */
     private markdownToHTML(markdownText: string): string {
         /* 自定义生成器 */
         let myRenderer: marked.Renderer = new marked.Renderer();
-        /* 覆写`标题`生成规则「弃用」=>
-          `marked v0.4.0` 已支持`headerIds`选项
+        /**
+         * 覆写`标题`生成规则「弃用」->
+         * `marked v0.4.0`已支持`headerIds`选项
          */
         /*
         myRenderer.heading = function (text, level) {
@@ -455,7 +506,9 @@ class BiliColumnMarkdown {
     }
     /**
      * 功能函数: 检测 HTML 文档中是否包含本地图片
+     *
      * @param HTMLText
+     * @returns boolean
      */
     private hasLocalImages(HTMLText: string): boolean {
         let hasImage: RegExpMatchArray | null = HTMLText.match(/src=.* \/>/g);
@@ -503,7 +556,7 @@ class BiliColumnMarkdown {
                 localImagesArr[i]
             );
             /* 生成图片上传表单 */
-            let imageForm: object = this.imagesFormGenerate(imageFullPath);
+            let imageForm: any | object = this.imagesFormGenerate(imageFullPath);
             /* 取图片特征值作图片ID */
             let imageId: string = imageForm["cover"].slice(-50, -30);
             /* 图片地址存入本地图片暂存区 */
@@ -522,16 +575,16 @@ class BiliColumnMarkdown {
      */
     private imagesFormGenerate(
         imageURL: string,
-        csrf: string = this.userPreferences["csrf"]
+        csrf: any | string = this.userPreferences.get("csrf")
     ): object {
-        /* 功能函数: 图片转 Base64 编码 */
+        /* 功能函数: 图片转换 Base64 编码 */
         function imageToBase64(imageSource: string): string {
-        /* ------------------------------- *
-         *        图片 Base64 格式头       *
-         * ------------------------------- *
-         * PNG  -> data:image/png;base64,  *
-         * JPEG -> data:image/jpeg;base64, *
-         * GIF  -> data:image/gif;base64,  *
+        /* -------------------------------
+         *        图片 Base64 格式头
+         * -------------------------------
+         * PNG  -> data:image/png;base64,
+         * JPEG -> data:image/jpeg;base64,
+         * GIF  -> data:image/gif;base64,
          * ------------------------------- */
             if (imageSource.indexOf('http') != 0) {
                 let imagePrefix: string = "";
@@ -547,7 +600,7 @@ class BiliColumnMarkdown {
                 } else if (path.extname(imageSource) == ".gif") {
                     imagePrefix = "data:image/gif;base64,";
                 }
-                return  imagePrefix + imageBase64;
+                return imagePrefix + imageBase64;
             } else {
                 throw "[ERROR]: Unsupported image type!"
             }
@@ -610,12 +663,17 @@ class BiliColumnMarkdown {
                 );
             }
             /* 一次性全部提交 */
-            this.postRequest(this.HTMLFormGenerate() ,"html");
+            this.postRequest(this.HTMLFormGenerate(), "html");
         } else {
             /* 本地图片未全部上传完成 */
-            //console.log("Do nothing");
+            //console.log("Do nothing...");
         }
     }
 }
-export { BiliColumnMarkdown };
+
+/* 导出模块 */
+export {
+    BiliColumnMarkdown
+};
+
 /* EOF */

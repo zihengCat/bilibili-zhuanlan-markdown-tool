@@ -22,8 +22,8 @@ http.createServer(function (request, response) {
     request.on("end", function () {
         var bodyObj = querystring.parse(body);
         response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-        if (bodyObj["md_file_path"] &&
-            bodyObj["config_check"] === "ok") {
+        if (bodyObj["md_file_path"]
+            && bodyObj["config_check"] === "ok") {
             var configFullPath = path.resolve(__dirname, "../config/config.json");
             var userConfig = fs.readFileSync(configFullPath, "utf-8");
             try {
