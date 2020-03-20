@@ -46,7 +46,7 @@
 
 这是行内代码`code`。
 
-**注意：代码块中的`<>`尖括号内容会被 B 站服务端过滤屏蔽掉，WTF!**
+**注意：代码块中的`<>`尖括号内容会被 B 站服务端过滤屏蔽掉，WTF！**
 
 ```plain
 Hello, you.
@@ -97,7 +97,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 ```
 > 代码清单：`JavaScript`代码
-
 
 [Bilibili_Logo]: ./bili_logo.png
 
