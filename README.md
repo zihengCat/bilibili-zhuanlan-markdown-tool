@@ -36,11 +36,26 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 
 ## Step 1 - 安装环境与获取源码
 
-此工具使用`JavaScript`写成，要想使用它，需要先在本机上安装`Node.js`运行环境。
+工具使用`TypeScript`写成，使用需先在本机上安装`Node.js`运行环境。
 
 > `Node.js`官网：https://nodejs.org/
 
-获取 GitHub 上的项目源码，可以使用`git clone`，也可以直接下载`zip`压缩包。对于`Node.js`项目，我们一般使用`npm install`来安装项目依赖。
+获取 GitHub 项目工程源码，可以使用`git clone`，也可以直接下载`zip`压缩包。
+
+对于`Node.js`项目，我们一般使用`npm install`安装项目依赖。
+
+```bash
+# 获取源代码包
+$ git clone 'https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool.git'
+
+# 切换到工程目录
+$ cd 'bilibili-zhuanlan-markdown-tool'
+
+# NPM 安装依赖
+$ npm install 
+...
+```
+> 注：操作流程
 
 ## Step 2 - 获取关键参数写配置文件
 
@@ -87,8 +102,9 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 
 ```bash
 $ npm run server
+...
 ```
-> 代码清单：启动工具前端窗口（端口：2233）
+> 代码清单：启动工具前端窗口（默认端口：2233）
 
 ![step4_1][step4_1]
 
@@ -110,7 +126,11 @@ $ npm run cli <path/to/your/markdown/file.md>
 
 ### 发布前准备工作
 
-预览文章、添加头图、选择分类、撰写专栏推荐语，这些都是文章发布前的准备工作，手动完成后即可提请发布文章，当然，B站要审核专栏文章。**目前，B站专栏还不支持修改发布后的专栏文章。**
+预览文章、添加头图、选择分类、撰写专栏推荐语，这些都是文章发布前的准备工作，手动完成后即可提请发布文章，当然，B站要审核专栏文章。
+
+~~目前，B站专栏还不支持修改发布后的专栏文章。~~
+
+**已支持，修改次数有限。**
 
 ![step4_3][step4_3]
 
