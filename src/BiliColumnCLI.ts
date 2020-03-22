@@ -4,11 +4,15 @@
  * Lincese: MIT
  * GitHub: https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool
  */
+
 import * as fs from "fs";
 import * as path from "path";
-import * as BiliColumnModule from "./BiliColumnMarkdown"
+
+import * as BiliColumnModule from "./BiliColumnMarkdown";
+
 /* Splice CLI arguments */
 let cliArgsArray: string[] = process.argv.splice(0);
+
 /* Show some infomations */
 if (cliArgsArray.length === 3 &&
     cliArgsArray[2].startsWith("-")) {

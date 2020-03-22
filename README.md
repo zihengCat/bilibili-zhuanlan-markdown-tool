@@ -216,7 +216,7 @@ $ npm run cli <path/to/your/markdown/file.md>
 
 # Configurations（配置选项）
 
-此工具的`json`配置文件非常简单，取得个人用户的`cookies`信息填入即可，就像这样：
+此工具 JSON 配置文件非常简单，取得个人用户的`cookies`信息填入即可，就像这样：
 
 ```json
 {
@@ -235,6 +235,13 @@ cookies -> "sid"
            "SESSDATA"
 ```
 > 注：配置文件详情
+
+| 配置项 | 解释说明 | 数据类型 | 默认值 |
+| :----- | :------- | :------- | :----- |
+| `cookies` | 用户认证 Cookies 信息 | `string` | 必填 |
+| `web.port` | 前端服务端口号 | `number` | `2233` |
+
+> 表：配置项说明表
 
 # Development（开发相关）
 
