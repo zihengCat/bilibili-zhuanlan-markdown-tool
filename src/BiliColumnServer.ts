@@ -10,7 +10,24 @@ import * as fs from "fs";
 import * as path from "path";
 import * as querystring from "querystring";
 
-import * as BiliColumnModule from "./BiliColumnMarkdown"
+import * as BiliColumnModule from "./BiliColumnMarkdown";
+
+/**
+ * User Configurations -> JSON Object
+ */
+let userConfigObj: any | object = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../config/config.json"),
+        "utf-8"
+    )
+);
+
+/**
+ * Listening Web Port -> Number
+ */
+let listenWebPort: number = userConfigObj.hasOwnProperty("web.port")
+    ? Number.parseInt(userConfigObj["web.port"])
+    : 2233;
 
 /* Create a tiny HTTP server */
 http.createServer(function(request, response) {
@@ -39,7 +56,7 @@ http.createServer(function(request, response) {
             // TODO: maybe change hardcode `config.json` position...
             let configFullPath = path.resolve(__dirname, "../config/config.json");
             let userConfig: string = fs.readFileSync(configFullPath, "utf-8");
-            /* Try uploading */
+            /* Try uploading Markdown files */
             try {
                 /* Call `BiliColumnMarkdown` upload interface */
                 let b: BiliColumnModule.BiliColumnMarkdown =
@@ -85,9 +102,12 @@ http.createServer(function(request, response) {
         }
         response.end();
     });
-}).listen(2233); /* Listening Port -> 2233 */
+}).listen(listenWebPort); /* Listening Port -> userConfigedWebPort | 2233 */
 
 /* Show infomations to Console */
-console.log("[INFO]: Server running at http://127.0.0.1:2233/");
+console.log(
+    "[INFO]: Server running at http://127.0.0.1:${web.port}/"
+    .replace("${web.port}", listenWebPort.toString())
+);
 
 /* EOF */

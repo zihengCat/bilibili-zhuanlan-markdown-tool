@@ -12,6 +12,10 @@ var fs = __importStar(require("fs"));
 var path = __importStar(require("path"));
 var querystring = __importStar(require("querystring"));
 var BiliColumnModule = __importStar(require("./BiliColumnMarkdown"));
+var userConfigObj = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/config.json"), "utf-8"));
+var listenWebPort = userConfigObj.hasOwnProperty("web.port")
+    ? Number.parseInt(userConfigObj["web.port"])
+    : 2233;
 http.createServer(function (request, response) {
     var HTMLIndexPath = path.resolve(__dirname, "../front_end/index.html");
     var HTMLIndexData = fs.readFileSync(HTMLIndexPath, "utf-8");
@@ -28,9 +32,9 @@ http.createServer(function (request, response) {
             var userConfig = fs.readFileSync(configFullPath, "utf-8");
             try {
                 var b = new BiliColumnModule.BiliColumnMarkdown();
-                var userConfigObj = JSON.parse(userConfig);
-                var userCookies = userConfigObj["cookies"];
-                b.startProcess(bodyObj["md_file_path"], userConfigObj);
+                var userConfigObj_1 = JSON.parse(userConfig);
+                var userCookies = userConfigObj_1["cookies"];
+                b.startProcess(bodyObj["md_file_path"], userConfigObj_1);
                 var HTMLSuccessfulPath = path.resolve(__dirname, "../front_end/feedback_success.html");
                 var HTMLSuccessfulData = fs.readFileSync(HTMLSuccessfulPath, "utf-8");
                 response.write(HTMLSuccessfulData);
@@ -47,5 +51,6 @@ http.createServer(function (request, response) {
         }
         response.end();
     });
-}).listen(2233);
-console.log("[INFO]: Server running at http://127.0.0.1:2233/");
+}).listen(listenWebPort);
+console.log("[INFO]: Server running at http://127.0.0.1:${web.port}/"
+    .replace("${web.port}", listenWebPort.toString()));
