@@ -59,3 +59,5 @@ class BilibiliLogin {
     };
 }
 let c = new BilibiliLogin();
+
+/* EOF */

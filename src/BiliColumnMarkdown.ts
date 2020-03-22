@@ -151,6 +151,9 @@ class BiliColumnMarkdown {
         /* 转换 Markdown 文档为 HTML 文档 */
         this.HTMLText = this.markdownToHTML(this.markdownText);
 
+        // Debug Print...
+        // console.log(this.HTMLText);
+
         /* 带图片/无图片提交 */
         if (this.hasLocalImages(this.HTMLText)) {
             this.postWithImagesForm();
