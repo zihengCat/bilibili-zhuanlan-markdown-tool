@@ -14,7 +14,7 @@
 
 2. 获取项目源码，`npm install`安装项目依赖。
 
-3. 取得用户认证`cookies`，写入配置文件。
+3. 取得用户认证`cookies`信息，写入配置文件。
 
 4. 使用`Markdown`写作。
 
@@ -45,7 +45,7 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 对于`Node.js`项目，我们一般使用`npm install`安装项目依赖。如果国内网络不畅，可以指定使用淘宝 NPM 镜像。
 
 ```bash
-npm --registry 'https://registry.npm.taobao.org/' install ...
+$ npm --registry 'https://registry.npm.taobao.org/' install ...
 ```
 > 代码清单：单次 NPM 命令使用镜像
 
@@ -60,7 +60,7 @@ $ git clone 'https://github.com/zihengCat/bilibili-zhuanlan-markdown-tool.git'
 $ cd 'bilibili-zhuanlan-markdown-tool'
 
 # NPM 安装依赖
-$ npm install 
+$ npm install
 ...
 ```
 > 注：操作流程
@@ -236,10 +236,10 @@ cookies -> "sid"
 ```
 > 注：配置文件详情
 
-| 配置项 | 解释说明 | 数据类型 | 默认值 |
-| :----- | :------- | :------- | :----- |
-| `cookies` | 用户认证 Cookies 信息 | `string` | 必填 |
-| `web.port` | 前端服务端口号 | `number` | `2233` |
+| 配置项 | 数据类型 | 默认值 | 说明 |
+| :---- | :----- | :----- | :--- |
+| `cookies` | `string` | 必填 | 用户认证 Cookies 信息 |
+| `web.port` | `number` | `2233` | Web 前端服务端口号 |
 
 > 表：配置项说明表
 
