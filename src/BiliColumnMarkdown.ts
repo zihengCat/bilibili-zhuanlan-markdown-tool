@@ -16,7 +16,7 @@ import * as https from "https";
 import * as querystring from "querystring";
 
 /**
- * Third-Part Libraries
+ * Third-part Libraries
  */
 import marked from "marked";
 
@@ -53,8 +53,8 @@ class BiliColumnMarkdown {
      * [
      *     [ imageId_1, localImageURL_1 ],
      *     [ imageId_2, localImageURL_2 ],
-     *     ...,
-     *     [ imageId_n, localImageURL_n ]
+     *     ...
+     *     [ imageId_n, localImageURL_n ],
      * ]
      * ```
      * > 注：暂存区数据结构
@@ -66,8 +66,8 @@ class BiliColumnMarkdown {
      * [
      *     [ imageId_1, biliImageURL_1 ],
      *     [ imageId_2, biliImageURL_2 ],
-     *     ...,
-     *     [ imageId_n, biliImageURL_n ]
+     *     ...
+     *     [ imageId_n, biliImageURL_n ],
      * ]
      * ```
      * > 注：暂存区数据结构
@@ -128,7 +128,7 @@ class BiliColumnMarkdown {
      */
     public startProcess(markdownPath: string, userConfig: object): void {
 
-        /* Bug-Fix: Path should be trimmed */
+        /* Bug-fix: Path should be trimmed */
         markdownPath = markdownPath.trim();
 
         /* 解析 Markdown 文档 -> 绝对路径 */
@@ -165,10 +165,10 @@ class BiliColumnMarkdown {
      * Object 转换 Map
      *
      * @param obj
-     * @returns `Map<string, string>`
+     * @returns Map<string, string>
      */
     private objToMap(obj: any): Map<string, string> {
-        let map = new Map<string, string>();
+        let map: Map<string, string> = new Map<string, string>();
         if (obj === undefined) {
             return map;
         }
@@ -278,13 +278,13 @@ class BiliColumnMarkdown {
                 querystring.stringify(form)
             );
             req.end();
-        } else if (flag == "image") {
+        } else if (flag === "image") {
             /* 图片提交头 */
             postOptions["host"] = "member.bilibili.com";
             postOptions["path"] = "/x/web/article/upcover";
             postOptions["headers"]["X-Requested-With"] = "XMLHttpRequest";
-            /** NOTE:
-             *  Keep a reference of this instance.
+            /**
+             * NOTE: Keep a reference of this instance.
              */
             let bReference: BiliColumnMarkdown = this;
             /* --------------- */
@@ -423,12 +423,20 @@ class BiliColumnMarkdown {
         }
         /* 覆写`分隔线`生成规则 */
         myRenderer.hr = function(): string {
-            /* HardCode here... */
-            let biliCutOff: string =
-            "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png";
-            return '<figure class="img-box">' +
-            '<img src="${cutoff}" class="cut-off-1" />'.replace("${cutoff}", biliCutOff) +
-            '</figure>'
+            /**
+             * HardCode here:
+             * cut-off-1
+             * cut-off-2
+             * cut-off-3
+             * cut-off-4
+             */
+            let biliCutOffLine: string =
+                "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png";
+            return '<figure class="img-box">'
+            + '<img src="CUTOFF_LINE" class="cut-off-1" />'.replace(
+                /CUTOFF_LINE/g, biliCutOffLine
+            )
+            + '</figure>';
         }
         /* 生成器配置选项 */
         marked.setOptions({
@@ -482,22 +490,22 @@ class BiliColumnMarkdown {
     private csrfGenerate(cookiesText: string): string {
         function isVaildCookies(cookies_str: string): boolean {
             /* 检查 Cookies 是否包含关键字段 */
-            if (cookies_str.match(/sid=/g) == null ||
-                cookies_str.match(/DedeUserID=/g) == null ||
-                cookies_str.match(/DedeUserID__ckMd5=/g) == null ||
-                cookies_str.match(/bili_jct=/g) == null ||
-                cookies_str.match(/SESSDATA=/g) == null ) {
-                    throw("[ERROR]: Invaild `cookies`...");
+            if (cookies_str.match(/sid=/g) == null
+                || cookies_str.match(/DedeUserID=/g) == null
+                || cookies_str.match(/DedeUserID__ckMd5=/g) == null
+                || cookies_str.match(/bili_jct=/g) == null
+                || cookies_str.match(/SESSDATA=/g) == null ) {
+                throw("[ERROR]: Invaild `cookies`...");
             }
             return true;
         }
         isVaildCookies(cookiesText);
         let cookies_str: string[] = cookiesText.split(";");
-        for (let i: number = 0; i < cookies_str.length; ++i) {
+        for (let i: number = 0; i < cookies_str.length; i++) {
             cookies_str[i] = cookies_str[i].trim();
         }
         let csrf: string = "";
-        for (let i: number = 0; i < cookies_str.length; ++i) {
+        for (let i: number = 0; i < cookies_str.length; i++) {
             /* 关键字段 -> bili_jct */
             if (cookies_str[i].indexOf("bili_jct=") == 0) {
                 csrf = cookies_str[i].slice(
@@ -524,18 +532,19 @@ class BiliColumnMarkdown {
     /* 处理 HTML 中本地图片 */
     private postLocalImages() {
         function checkLocally(src: string) {
-            if (src.indexOf("http") == 0 ||
-                src.indexOf("https") == 0) {
-                /* B站不支持外链图片，
-                   关闭外链图片功能 */
-                //throw("[ERROR]: Unsupported outer-linking images...");
+            if (src.indexOf("http") == 0
+                || src.indexOf("https") == 0) {
+                /**
+                 * B站不支持外链图片 -> 关闭外链图片功能
+                 */
+                // throw("[ERROR]: Unsupported outer-linking images...");
+                console.warn("[WARN]: Unsupported outer-linking images " + src);
                 return false;
             } else {
                 return true;
             }
         }
-        /* 获取所有图片地址
-           格式: <img src="%src" /> */
+        /* 获取所有图片地址，格式: <img src="%src" /> */
         let imagesArr: RegExpMatchArray | null = this.HTMLText.match(/src=.* \/>/g);
         /* 优化项 -> 如果不存在本地图片, 可直接返回 */
         if (imagesArr == null) {
@@ -572,6 +581,7 @@ class BiliColumnMarkdown {
     }
     /**
      * 生成图片发送表单
+     *
      * @param imageURL
      * @param csrf
      * @returns Image Form Object

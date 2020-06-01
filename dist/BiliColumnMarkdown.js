@@ -137,7 +137,7 @@ var BiliColumnMarkdown = (function () {
             req.write(querystring.stringify(form));
             req.end();
         }
-        else if (flag == "image") {
+        else if (flag === "image") {
             postOptions["host"] = "member.bilibili.com";
             postOptions["path"] = "/x/web/article/upcover";
             postOptions["headers"]["X-Requested-With"] = "XMLHttpRequest";
@@ -207,10 +207,10 @@ var BiliColumnMarkdown = (function () {
                 '</span>';
         };
         myRenderer.hr = function () {
-            var biliCutOff = "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png";
-            return '<figure class="img-box">' +
-                '<img src="${cutoff}" class="cut-off-1" />'.replace("${cutoff}", biliCutOff) +
-                '</figure>';
+            var biliCutOffLine = "https://i0.hdslb.com/bfs/article/0117cbba35e51b0bce5f8c2f6a838e8a087e8ee7.png";
+            return '<figure class="img-box">'
+                + '<img src="CUTOFF_LINE" class="cut-off-1" />'.replace(/CUTOFF_LINE/g, biliCutOffLine)
+                + '</figure>';
         };
         marked_1["default"].setOptions({
             renderer: myRenderer,
@@ -237,22 +237,22 @@ var BiliColumnMarkdown = (function () {
     };
     BiliColumnMarkdown.prototype.csrfGenerate = function (cookiesText) {
         function isVaildCookies(cookies_str) {
-            if (cookies_str.match(/sid=/g) == null ||
-                cookies_str.match(/DedeUserID=/g) == null ||
-                cookies_str.match(/DedeUserID__ckMd5=/g) == null ||
-                cookies_str.match(/bili_jct=/g) == null ||
-                cookies_str.match(/SESSDATA=/g) == null) {
+            if (cookies_str.match(/sid=/g) == null
+                || cookies_str.match(/DedeUserID=/g) == null
+                || cookies_str.match(/DedeUserID__ckMd5=/g) == null
+                || cookies_str.match(/bili_jct=/g) == null
+                || cookies_str.match(/SESSDATA=/g) == null) {
                 throw ("[ERROR]: Invaild `cookies`...");
             }
             return true;
         }
         isVaildCookies(cookiesText);
         var cookies_str = cookiesText.split(";");
-        for (var i = 0; i < cookies_str.length; ++i) {
+        for (var i = 0; i < cookies_str.length; i++) {
             cookies_str[i] = cookies_str[i].trim();
         }
         var csrf = "";
-        for (var i = 0; i < cookies_str.length; ++i) {
+        for (var i = 0; i < cookies_str.length; i++) {
             if (cookies_str[i].indexOf("bili_jct=") == 0) {
                 csrf = cookies_str[i].slice(cookies_str[i].indexOf("=") + 1);
             }
@@ -270,8 +270,9 @@ var BiliColumnMarkdown = (function () {
     };
     BiliColumnMarkdown.prototype.postLocalImages = function () {
         function checkLocally(src) {
-            if (src.indexOf("http") == 0 ||
-                src.indexOf("https") == 0) {
+            if (src.indexOf("http") == 0
+                || src.indexOf("https") == 0) {
+                console.warn("[WARN]: Unsupported outer-linking images " + src);
                 return false;
             }
             else {
