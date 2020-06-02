@@ -37,7 +37,6 @@ B站专栏文章使用`HTML`对专栏文章进行存储与展示，无论是使�
 ## Step 1 - 安装环境与获取源码
 
 工具使用`TypeScript`写成，使用需先在本机上安装`Node.js`运行环境。
-
 > `Node.js`官网：https://nodejs.org/
 
 获取 GitHub 项目工程源码，可以使用`git clone`，也可以直接下载`zip`压缩包。
@@ -150,7 +149,7 @@ $ npm run cli <path/to/your/markdown/file.md>
 
 ## 不支持的 Markdown 语法
 
-目前，B站专栏所能提供的功能选项还非常有限，`Markdown`基本语法标准都无法完全支持，对于下列`Markdown`语法项（有些也是常用选项），B站专栏目前还无法提供支持，而对于扩展`Markdown`功能，更是不支持。
+目前，B站专栏所能提供的功能选项还非常有限，`Markdown`基本语法标准都无法完全支持，对于下列`Markdown`语法项（有些是常用选项），B站专栏目前还无法提供支持，而对于扩展`Markdown`功能，更是不支持。
 
 - 六级标题「可用」
 - 斜体文本
