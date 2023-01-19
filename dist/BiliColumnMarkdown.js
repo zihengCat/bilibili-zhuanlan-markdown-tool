@@ -138,9 +138,13 @@ var BiliColumnMarkdown = (function () {
             req.end();
         }
         else if (flag == "image") {
+            /*
             postOptions["host"] = "member.bilibili.com";
             postOptions["path"] = "/x/web/article/upcover";
             postOptions["headers"]["X-Requested-With"] = "XMLHttpRequest";
+            */
+            postOptions["host"] = "api.bilibili.com";
+            postOptions["path"] = "/x/article/creative/article/upcover";
             var bReference_1 = this;
             new Promise(function (resolve, reject) {
                 var ret = [];
